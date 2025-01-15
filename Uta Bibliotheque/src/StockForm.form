@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="StockForm">
+  <grid id="27dc6" binding="StockPanel" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="964" height="741"/>
+    </constraints>
+    <properties>
+      <minimumSize width="964" height="741"/>
+      <preferredSize width="964" height="741"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="6e1fd" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-10328468"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="5e328" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="48" style="1"/>
+              <foreground color="-16128660"/>
+              <text value="GESTION STOCK"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="d8fb4" layout-manager="GridLayoutManager" row-count="15" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-11315106"/>
+        </properties>
+        <border type="line">
+          <color color="-10328468"/>
+        </border>
+        <children>
+          <component id="ccd8" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Titre Du Livre"/>
+            </properties>
+          </component>
+          <component id="21695" class="javax.swing.JTextField" binding="tfTitreLivre">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusCycleRoot value="false"/>
+              <font name="Fira Code" size="18" style="2"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="e8b39" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Nombre d'Exemplaire"/>
+            </properties>
+          </component>
+          <component id="7bfb8" class="javax.swing.JTextField" binding="tfNbrExemplaire">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Fira Code" size="18" style="2"/>
+            </properties>
+          </component>
+          <component id="f3e22" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Etat du Livre"/>
+            </properties>
+          </component>
+          <component id="cb293" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Emplacement"/>
+            </properties>
+          </component>
+          <component id="60c09" class="javax.swing.JTextField" binding="tfEmplacement">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Fira Code" size="18" style="2"/>
+            </properties>
+          </component>
+          <component id="f3d4d" class="javax.swing.JTextField" binding="tfRecherche">
+            <constraints>
+              <grid row="14" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Fira Code" size="18" style="2"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="97015" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="13" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Recherche"/>
+            </properties>
+          </component>
+          <vspacer id="c9bcf">
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="2ebac">
+            <constraints>
+              <grid row="5" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="2b230">
+            <constraints>
+              <grid row="8" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="b4037">
+            <constraints>
+              <grid row="11" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="60a36">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="4" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="f479d" class="javax.swing.JButton" binding="btnRcherche">
+            <constraints>
+              <grid row="13" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Rechercher"/>
+            </properties>
+          </component>
+          <component id="94af7" class="javax.swing.JComboBox" binding="cbEtatLivre">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value="Disponible"/>
+                <item value="Prêter"/>
+              </model>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="c89ed" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-16752734"/>
+        </properties>
+        <border type="line">
+          <color color="-15454195"/>
+        </border>
+        <children>
+          <scrollpane id="4e971">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Fira Code" size="18" style="2"/>
+            </properties>
+            <border type="line" title="Stock" title-justification="2" title-position="2">
+              <font name="Zapfino" size="22" style="1"/>
+              <color color="-16742445"/>
+            </border>
+            <children>
+              <component id="b9f0c" class="javax.swing.JTable" binding="table1" default-binding="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <vspacer id="50211">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+      <grid id="4c4fb" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="10"/>
+            <preferred-size width="-1" height="10"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-11315106"/>
+        </properties>
+        <border type="line">
+          <color color="-10328468"/>
+        </border>
+        <children>
+          <component id="c7043" class="javax.swing.JButton" binding="btnCreer">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Créer"/>
+            </properties>
+          </component>
+          <component id="639a0" class="javax.swing.JButton" binding="btnModifier">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Modifier"/>
+            </properties>
+          </component>
+          <component id="e0547" class="javax.swing.JButton" binding="btnSupprimer">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Supprimer"/>
+            </properties>
+          </component>
+          <component id="89ac7" class="javax.swing.JButton" binding="btnViderChamps">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Vider"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

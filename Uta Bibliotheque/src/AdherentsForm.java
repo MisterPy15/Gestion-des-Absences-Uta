@@ -36,12 +36,13 @@ public class AdherentsForm extends JFrame {
     private String photoPath; // Champ pour le chemin de la photo
 
     public AdherentsForm() {
-        setTitle("Gestion Des Adherents");
+        setTitle("Gestion Des Etudiants");
         setContentPane(AdherentPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
         setResizable(false);
         setVisible(true);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Initialiser les JDateChooser
@@ -74,7 +75,7 @@ public class AdherentsForm extends JFrame {
     public void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/UTA_Bibliotheque?useSSL=false&serverTimezone=UTC", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
             System.out.println("Succès");
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();

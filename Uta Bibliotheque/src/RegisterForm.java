@@ -106,7 +106,7 @@ public class RegisterForm extends JDialog {
 
     private User addUserToDatabase(String nom, String prenom, String adresse, String numero, String mail, String password, String photoPath) {
         User user = null;
-        final String DB_URL = "jdbc:mysql://localhost/UTA_Bibliotheque?serverTimezone=UTC";
+        final String DB_URL = "jdbc:mysql://localhost/GestionDesAbsences_Uta?serverTimezone=UTC";
         final String USERNAME = "root";
         final String PASSWORD = "";
 

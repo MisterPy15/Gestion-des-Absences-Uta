@@ -84,7 +84,7 @@
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
-              <text value="Email"/>
+              <text value="Matricule"/>
             </properties>
           </component>
           <component id="7dac5" class="javax.swing.JTextField" binding="tfEmail">
@@ -295,7 +295,7 @@
             <properties>
               <font name="Fira Code" size="18" style="2"/>
             </properties>
-            <border type="line" title="Liste des Adhérents" title-justification="2" title-position="2">
+            <border type="line" title="Liste des Etudiants" title-justification="2" title-position="2">
               <font name="Zapfino" size="22" style="1"/>
               <color color="-16742445"/>
             </border>

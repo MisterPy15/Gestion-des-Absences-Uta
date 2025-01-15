@@ -94,6 +94,36 @@ public class DashoardForm extends JFrame {
             }
         });
 
+        btnReservations.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ReservationForm();
+            }
+        });
+
+        btnEmprunt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EmpruntForm();
+            }
+        });
+
+        btnStock.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StockForm();
+            }
+        });
+
+        btnLivre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LivreForm();
+            }
+        });
+
+
+
         btnDeconnection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
