@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ReservationForm extends JFrame {
+public class EnseignantsForm extends JFrame {
     private JPanel ReservationPanel;
     private JTextField tfTitreLivre;
     private JTextField tfRecherche;
@@ -30,7 +30,7 @@ public class ReservationForm extends JFrame {
     private JDateChooser dateReserve;
     private JDateChooser dateRappeldeDispo;
 
-    public ReservationForm() {
+    public EnseignantsForm() {
         setTitle("Gestion des Réservations");
         setContentPane(ReservationPanel);
         setMinimumSize(new Dimension(964, 741));
@@ -343,6 +343,6 @@ public class ReservationForm extends JFrame {
 
 
     public static void main(String[] args) {
-        new ReservationForm();
+        new EnseignantsForm();
     }
 }

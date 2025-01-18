@@ -90,35 +90,35 @@ public class DashoardForm extends JFrame {
         btnAdherent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AdherentsForm();
+                new EtudiantsForm();
             }
         });
 
         btnReservations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ReservationForm();
+                new EnseignantsForm();
             }
         });
 
         btnEmprunt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new EmpruntForm();
+                new AdminsForm();
             }
         });
 
         btnStock.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StockForm();
+                new ModuleForm();
             }
         });
 
         btnLivre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LivreForm();
+                new AbsenceForm();
             }
         });
 

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 
-public class StockForm extends JFrame{
+public class ModuleForm extends JFrame{
 
     private JTextField tfTitreLivre;
     private JTextField tfNbrExemplaire;
@@ -25,7 +25,7 @@ public class StockForm extends JFrame{
     private PreparedStatement pst;
 
 
-    public StockForm(){
+    public ModuleForm(){
         setTitle("Gestion Du Stock");
         setContentPane(StockPanel);
         setMinimumSize(new Dimension(964, 741));
@@ -275,7 +275,7 @@ public class StockForm extends JFrame{
 
 
     public static void main(String[] args) {
-        new StockForm();
+        new ModuleForm();
     }
 
 }

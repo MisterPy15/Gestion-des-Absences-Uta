@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 
-public class EmpruntForm extends JFrame {
+public class AdminsForm extends JFrame {
     private JTextField tfTitreLivre;
     private JTextField tfIdAdherent;
     private JButton btnRecherche;
@@ -33,7 +33,7 @@ public class EmpruntForm extends JFrame {
     private JDateChooser dateRetour;
     private JDateChooser dateRappel;
 
-    public EmpruntForm() {
+    public AdminsForm() {
         setTitle("Gestion Des Emprunts");
         setContentPane(EmpruntPanel);
         setMinimumSize(new Dimension(964, 741));
@@ -432,6 +432,6 @@ public class EmpruntForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        new EmpruntForm();
+        new AdminsForm();
     }
 }

@@ -10,7 +10,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LivreForm extends JFrame {
+public class AbsenceForm extends JFrame {
     private JButton btnSelection;
     private JButton btnModifier;
     private JButton btnSupprimer;
@@ -31,7 +31,7 @@ public class LivreForm extends JFrame {
     private PreparedStatement pst;
     private String photoPath;
 
-    public LivreForm() {
+    public AbsenceForm() {
         setTitle("Gestion Des Livres");
         setContentPane(LivrePanel);
         setMinimumSize(new Dimension(964, 741));
@@ -201,7 +201,7 @@ public class LivreForm extends JFrame {
         String code = tfCode.getText();
 
         if (titre.isEmpty() || auteur.isEmpty() || dateparution == null || nbrpage.isEmpty() || code.isEmpty() || photoPath == null) {
-            JOptionPane.showMessageDialog(LivreForm.this, "Svp Remplissez Tous les Champs et Sélectionnez une Photo", "Attention", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(AbsenceForm.this, "Svp Remplissez Tous les Champs et Sélectionnez une Photo", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -220,11 +220,11 @@ public class LivreForm extends JFrame {
 
             int rowsUpdated = pst.executeUpdate();
             if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(LivreForm.this, "Modification Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(AbsenceForm.this, "Modification Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 table_load();
                 ViderChamps();
             } else {
-                JOptionPane.showMessageDialog(LivreForm.this, "Aucun livre trouvé avec cet identifiant", "Attention", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(AbsenceForm.this, "Aucun livre trouvé avec cet identifiant", "Attention", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -316,7 +316,7 @@ public class LivreForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        new LivreForm();
+        new AbsenceForm();
     }
 
 
