@@ -68,7 +68,7 @@
               <text value="Email"/>
             </properties>
           </component>
-          <component id="7dac5" class="javax.swing.JTextField" binding="tfEmail" custom-create="true">
+          <component id="7dac5" class="javax.swing.JTextField" binding="tfEmail">
             <constraints>
               <grid row="13" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -214,7 +214,9 @@
         <constraints>
           <grid row="0" column="1" row-span="2" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <foreground color="-14228212"/>
+        </properties>
         <border type="line">
           <color color="-15454195"/>
         </border>
