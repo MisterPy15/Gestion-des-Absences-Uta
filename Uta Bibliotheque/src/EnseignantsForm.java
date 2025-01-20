@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class EnseignantsForm extends JFrame {
     private JPanel ReservationPanel;
-    private JTextField tfTitreLivre;
+    private JTextField tfNom;
     private JTextField tfRecherche;
     private JButton btnRcherche;
     private JButton btnCreer;
@@ -20,11 +20,14 @@ public class EnseignantsForm extends JFrame {
     private JButton btnSupprimer;
     private JButton btnViderChamps;
     private JTable table1;
-    private JTextField tfIdLivre;
-    private JTextField tfIdAdhrent;
+    private JTextField tfAdresse;
+    private JTextField tfIdEmail;
     private JPanel DateReservePanel;
     private JPanel DateRappelDispoPanel;
     private JLabel lbNbrReserve;
+    private JTextField textField1;
+    private JTextField tfPrenom;
+    private JPasswordField pfMotdePasse;
     private Connection con;
     private PreparedStatement pst;
     private JDateChooser dateReserve;
@@ -102,9 +105,10 @@ public class EnseignantsForm extends JFrame {
         }
     }
 
+
     private void table_load() {
         try {
-            pst = con.prepareStatement("SELECT * FROM réservation");
+            pst = con.prepareStatement("SELECT * FROM Enseifnants");
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
@@ -113,9 +117,9 @@ public class EnseignantsForm extends JFrame {
     }
 
     private void ViderChamps() {
-        tfTitreLivre.setText("");
-        tfIdLivre.setText("");
-        tfIdAdhrent.setText("");
+        tfNom.setText("");
+        tfAdresse.setText("");
+        tfIdEmail.setText("");
         lbNbrReserve.setText("Nombre de Réservation : 0");
         dateReserve.setDate(null);
         dateRappeldeDispo.setDate(null);
@@ -136,11 +140,11 @@ public class EnseignantsForm extends JFrame {
                 String idlivre = rs.getString(4);
                 String idadherent = rs.getString(5);
 
-                tfTitreLivre.setText(Titre);
+                tfNom.setText(Titre);
                 dateReserve.setDate(DateReserve);
                 dateRappeldeDispo.setDate(DateRapelledeDispo);
-                tfIdLivre.setText(idlivre);
-                tfIdAdhrent.setText(idadherent);
+                tfAdresse.setText(idlivre);
+                tfIdEmail.setText(idadherent);
 
                 // Obtenir le nom de l'adhérent
                 String adherentName = getAdherentNameById(idadherent);
@@ -208,8 +212,8 @@ public class EnseignantsForm extends JFrame {
     }
 
     private void createReservation() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdhrent.getText();
+        String TitreLivre = tfNom.getText();
+        String IdAdherent = tfIdEmail.getText();
         Date dateReserveValue = dateReserve.getDate();
 
         if (TitreLivre.isEmpty() || IdAdherent.isEmpty() || dateReserveValue == null) {
@@ -249,7 +253,7 @@ public class EnseignantsForm extends JFrame {
             pst.setString(2, formattedDateReserve);
             pst.setString(3, formattedDateRappel);
             pst.setInt(4, 1);  // Initialisation à 1 pour une nouvelle réservation
-            pst.setString(5, tfIdLivre.getText());
+            pst.setString(5, tfAdresse.getText());
             pst.setString(6, IdAdherent);
             pst.executeUpdate();
 
@@ -269,8 +273,8 @@ public class EnseignantsForm extends JFrame {
     }
 
     private void updateReservation() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdhrent.getText();
+        String TitreLivre = tfNom.getText();
+        String IdAdherent = tfIdEmail.getText();
         Date dateReserveValue = dateReserve.getDate();
         String idReserve = tfRecherche.getText();
 
@@ -295,7 +299,7 @@ public class EnseignantsForm extends JFrame {
             pst.setString(1, TitreLivre);
             pst.setString(2, formattedDateReserve);
             pst.setString(3, formattedDateRappel);
-            pst.setString(4, tfIdLivre.getText());
+            pst.setString(4, tfAdresse.getText());
             pst.setString(5, IdAdherent);
             pst.setString(6, idReserve);
             pst.executeUpdate();

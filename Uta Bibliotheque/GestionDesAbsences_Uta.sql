@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 13 jan. 2025 à 16:40
+-- Généré le : lun. 20 jan. 2025 à 01:15
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -85,10 +85,21 @@ CREATE TABLE `Enseignant` (
 
 CREATE TABLE `Etudiant` (
   `Id` int(11) NOT NULL,
+  `NomEtudiant` varchar(50) DEFAULT NULL,
+  `PrenomEtudiant` varchar(60) DEFAULT NULL,
   `Matricule` varchar(20) DEFAULT NULL,
-  `IdUtilsateur` int(11) DEFAULT NULL,
+  `AdresseEtudiant` text DEFAULT NULL,
+  `EmailEtudiant` varchar(60) DEFAULT NULL,
   `IdFormation` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `Etudiant`
+--
+
+INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `IdFormation`) VALUES
+(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', NULL),
+(3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -135,7 +146,7 @@ CREATE TABLE `Utilisateur` (
 --
 
 INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `Adresse`, `Email`, `Role`) VALUES
-(1, 'Doe', 'John', 'py1234', 'Adresse Exemple', 'john.doe@example.com', 'Admin');
+(1, 'Mr', 'Py', 'py1234', 'Yopougon', 'py@gmail.com', 'Admin');
 
 --
 -- Index pour les tables déchargées
@@ -176,7 +187,6 @@ ALTER TABLE `Enseignant`
 --
 ALTER TABLE `Etudiant`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `IdUtilsateur` (`IdUtilsateur`),
   ADD KEY `IdFormation` (`IdFormation`);
 
 --
@@ -229,7 +239,7 @@ ALTER TABLE `Enseignant`
 -- AUTO_INCREMENT pour la table `Etudiant`
 --
 ALTER TABLE `Etudiant`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `Formation`
@@ -283,7 +293,6 @@ ALTER TABLE `Enseignant`
 -- Contraintes pour la table `Etudiant`
 --
 ALTER TABLE `Etudiant`
-  ADD CONSTRAINT `etudiant_ibfk_1` FOREIGN KEY (`IdUtilsateur`) REFERENCES `Utilisateur` (`Id`),
   ADD CONSTRAINT `etudiant_ibfk_2` FOREIGN KEY (`IdFormation`) REFERENCES `Formation` (`Id`);
 COMMIT;
 
