@@ -70,15 +70,6 @@
                   <text value="Mot De Passe"/>
                 </properties>
               </component>
-              <component id="1fd52" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font name="Monaco" size="18" style="1"/>
-                  <text value="Nombre de Réservation : 0"/>
-                </properties>
-              </component>
               <component id="1849e" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="12" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -105,7 +96,7 @@
                 </constraints>
                 <properties>
                   <font name="Monaco" size="18" style="1"/>
-                  <text value="Entrez un Id"/>
+                  <text value="Entrez Nom"/>
                 </properties>
               </component>
               <vspacer id="da707">
@@ -119,11 +110,6 @@
                 </constraints>
               </vspacer>
               <vspacer id="4175c">
-                <constraints>
-                  <grid row="8" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <vspacer id="4dfda">
                 <constraints>
                   <grid row="11" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -172,14 +158,6 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="626f8" class="javax.swing.JTextField" binding="textField1" default-binding="true">
-                <constraints>
-                  <grid row="10" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties/>
-              </component>
               <component id="f818" class="javax.swing.JTextField" binding="tfPrenom">
                 <constraints>
                   <grid row="4" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -195,6 +173,30 @@
                   </grid>
                 </constraints>
                 <properties/>
+              </component>
+              <component id="6c805" class="javax.swing.JTextField" binding="tfNumTel">
+                <constraints>
+                  <grid row="10" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+              <vspacer id="4e065">
+                <constraints>
+                  <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="e9dc1" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="9" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Monaco" size="18" style="1"/>
+                  <text value="Numéro de Téléphone"/>
+                </properties>
               </component>
             </children>
           </grid>

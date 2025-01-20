@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 20 jan. 2025 à 01:15
+-- Généré le : lun. 20 jan. 2025 à 11:58
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -43,15 +43,16 @@ CREATE TABLE `Absence` (
 
 CREATE TABLE `Administrateur` (
   `Id` int(11) NOT NULL,
-  `IdUtilisateur` int(11) DEFAULT NULL
+  `IdUtilisateur` int(11) DEFAULT NULL,
+  `Téléphone` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Administrateur`
 --
 
-INSERT INTO `Administrateur` (`Id`, `IdUtilisateur`) VALUES
-(1, 1);
+INSERT INTO `Administrateur` (`Id`, `IdUtilisateur`, `Téléphone`) VALUES
+(1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -76,6 +77,13 @@ CREATE TABLE `Enseignant` (
   `Num_Tel` varchar(20) DEFAULT NULL,
   `IdUtilsateur` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `Enseignant`
+--
+
+INSERT INTO `Enseignant` (`Id`, `Num_Tel`, `IdUtilsateur`) VALUES
+(1, '', 2);
 
 -- --------------------------------------------------------
 
@@ -136,6 +144,7 @@ CREATE TABLE `Utilisateur` (
   `Nom` varchar(60) DEFAULT NULL,
   `Prenom` varchar(60) DEFAULT NULL,
   `MotDePasse` varchar(16) NOT NULL,
+  `NumTel` int(20) DEFAULT NULL,
   `Adresse` varchar(120) DEFAULT NULL,
   `Email` varchar(60) DEFAULT NULL,
   `Role` varchar(60) DEFAULT NULL
@@ -145,8 +154,9 @@ CREATE TABLE `Utilisateur` (
 -- Déchargement des données de la table `Utilisateur`
 --
 
-INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `Adresse`, `Email`, `Role`) VALUES
-(1, 'Mr', 'Py', 'py1234', 'Yopougon', 'py@gmail.com', 'Admin');
+INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `NumTel`, `Adresse`, `Email`, `Role`) VALUES
+(1, 'Mr', 'Py', 'py1234', NULL, 'Yopougon', 'py@gmail.com', 'Admin'),
+(2, 'Wongniga', 'seydou soro', '1234', NULL, 'bingerville', 'wongnigaseydous@gmail.com', 'Enseignant');
 
 --
 -- Index pour les tables déchargées
@@ -233,7 +243,7 @@ ALTER TABLE `Cours`
 -- AUTO_INCREMENT pour la table `Enseignant`
 --
 ALTER TABLE `Enseignant`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `Etudiant`
@@ -257,7 +267,7 @@ ALTER TABLE `Module`
 -- AUTO_INCREMENT pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
