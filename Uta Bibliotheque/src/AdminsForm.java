@@ -13,8 +13,8 @@ import java.util.Date;
 
 
 public class AdminsForm extends JFrame {
-    private JTextField tfTitreLivre;
-    private JTextField tfIdAdherent;
+    private JTextField tfNom;
+    private JTextField tfEmail;
     private JButton btnRecherche;
     private JButton btnCreer;
     private JButton btnModifier;
@@ -24,9 +24,13 @@ public class AdminsForm extends JFrame {
     private JPanel DateEmpruntPanel;
     private JPanel DateRetourPanel;
     private JPanel DateRappelPanel;
-    private JPanel EmpruntPanel;
+    private JPanel AdminPanel;
     private JLabel lbNbrEmpruntAherent;
     private JTextField tfRecherche;
+    private JTextField tfPrenom;
+    private JTextField tfMotdepasse;
+    private JTextField tfNumTel;
+    private JTextField tfAdresse;
     private Connection con;
     private PreparedStatement pst;
     private JDateChooser dateEmprunt;
@@ -35,7 +39,7 @@ public class AdminsForm extends JFrame {
 
     public AdminsForm() {
         setTitle("Gestion Des Emprunts");
-        setContentPane(EmpruntPanel);
+        setContentPane(AdminPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
         setVisible(true);
@@ -131,8 +135,8 @@ public class AdminsForm extends JFrame {
     }
 
     private void ViderChamps() {
-        tfTitreLivre.setText("");
-        tfIdAdherent.setText("");
+        tfNom.setText("");
+        tfEmail.setText("");
         lbNbrEmpruntAherent.setText("Nombre d'Emprunt Adhérent : 0");
         dateEmprunt.setDate(null);
         dateRetour.setDate(null);
@@ -217,8 +221,8 @@ public class AdminsForm extends JFrame {
 
 
     private void createEmprunt() {
-        String titreLivre = tfTitreLivre.getText();
-        String idAdherent = tfIdAdherent.getText();
+        String titreLivre = tfNom.getText();
+        String idAdherent = tfEmail.getText();
         Date dateEmpruntValue = dateEmprunt.getDate();
 
         if (titreLivre.isEmpty() || idAdherent.isEmpty() || dateEmpruntValue == null) {
@@ -286,8 +290,8 @@ public class AdminsForm extends JFrame {
 
 
     private void modifyEmprunt() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdherent.getText();
+        String TitreLivre = tfNom.getText();
+        String IdAdherent = tfEmail.getText();
         Date dateEmpruntValue = dateEmprunt.getDate();
 
         if (TitreLivre.isEmpty() || IdAdherent.isEmpty() || dateEmpruntValue == null) {
@@ -343,8 +347,8 @@ public class AdminsForm extends JFrame {
     }
 
     private void deleteEmprunt() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdherent.getText();
+        String TitreLivre = tfNom.getText();
+        String IdAdherent = tfEmail.getText();
 
         if (TitreLivre.isEmpty() || IdAdherent.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
@@ -397,12 +401,12 @@ public class AdminsForm extends JFrame {
                 int nbreEmprunt = rs.getInt(5);
                 String idAdherent = rs.getString(6);
 
-                tfTitreLivre.setText(nomLivreEmprunte);
+                tfNom.setText(nomLivreEmprunte);
                 dateEmprunt.setDate(dateOfEmprunt);
                 dateRetour.setDate(dateOfRetour);
                 dateRappel.setDate(dateOfRappel);
                 lbNbrEmpruntAherent.setText("Nombre d'Emprunt Adhérent : " + nbreEmprunt);
-                tfIdAdherent.setText(idAdherent);
+                tfEmail.setText(idAdherent);
             } else {
                 ViderChamps();
                 JOptionPane.showMessageDialog(this, "Aucun emprunt trouvé pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);

@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class EnseignantsForm extends JFrame {
-    private JPanel ReservationPanel;
+    private JPanel EnseignantPanel;
     private JTextField tfNom;
     private JTextField tfRecherche;
     private JButton btnRcherche;
@@ -31,7 +31,7 @@ public class EnseignantsForm extends JFrame {
 
     public EnseignantsForm() {
         setTitle("Gestion des Enseignants");
-        setContentPane(ReservationPanel);
+        setContentPane(EnseignantPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
         setVisible(true);
@@ -124,7 +124,8 @@ public class EnseignantsForm extends JFrame {
     private void searchEnseignant() {
         try {
             String recherche = tfRecherche.getText();
-            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse, u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
+            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse," +
+                            " u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
             pst = con.prepareStatement(query);
             pst.setString(1, "%" + recherche + "%");
             pst.setString(2, "%" + recherche + "%");
@@ -254,6 +255,8 @@ public class EnseignantsForm extends JFrame {
             pst.executeUpdate();
 
             String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT IdUtilsateur FROM Enseignant WHERE Id = ?)";
+            //String queryUtilisateurEns = "DELETE FROM Utilisateur WHERE Id = ?";
+
             pst = con.prepareStatement(queryUtilisateur);
             pst.setInt(1, idEnseignant);
             pst.executeUpdate();
