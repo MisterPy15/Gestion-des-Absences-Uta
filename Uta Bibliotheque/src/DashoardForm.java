@@ -101,12 +101,12 @@ public class DashoardForm extends JFrame {
             }
         });
 
-//        btnEmprunt.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                new AdminsForm();
-//            }
-//        });
+        btnEmprunt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminsForm();
+            }
+        });
 
         btnStock.addActionListener(new ActionListener() {
             @Override
