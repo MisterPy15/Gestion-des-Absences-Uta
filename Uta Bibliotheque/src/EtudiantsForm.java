@@ -19,7 +19,6 @@ public class EtudiantsForm extends JFrame {
     private JTextField tfRecherche;
     private JPanel AdherentPanel;
 
-
     private Connection con;
     private PreparedStatement pst;
 
@@ -77,19 +76,20 @@ public class EtudiantsForm extends JFrame {
         }
     }
 
+
     private void loadEtudiants() {
         try {
-            String query = "SELECT * FROM etudiant";
+            String query = "SELECT * FROM Etudiant";
             pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
 
-            DefaultTableModel model = new DefaultTableModel(new String[]{"Matricule", "Nom", "Prenom", "Email", "Adresse"}, 0);
+            DefaultTableModel model = new DefaultTableModel(new String[]{"Matricule", "NomEtudiant", "PrenomEtudiant", "EmailEtudiant", "AdresseEtudiant"}, 0);
             while (rs.next()) {
                 String matricule = rs.getString("Matricule");
-                String nom = rs.getString("Nom");
-                String prenom = rs.getString("Prenom");
-                String email = rs.getString("Email");
-                String adresse = rs.getString("Adresse");
+                String nom = rs.getString("NomEtudiant");
+                String prenom = rs.getString("PrenomEtudiant");
+                String email = rs.getString("EmailEtudiant");
+                String adresse = rs.getString("AdresseEtudiant");
                 model.addRow(new Object[]{matricule, nom, prenom, email, adresse});
             }
             table1.setModel(model);
@@ -97,6 +97,15 @@ public class EtudiantsForm extends JFrame {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void resetFields() {
+        tfNom.setText("");
+        tfPrenom.setText("");
+        tfEmail.setText("");
+        tfAdresse.setText("");
+        tfMatricule.setText("");
+        tfRecherche.setText("");
     }
 
     private void createEtudiant() {
@@ -112,7 +121,7 @@ public class EtudiantsForm extends JFrame {
         }
 
         try {
-            String query = "INSERT INTO etudiant (Nom, Prenom, Email, Adresse, Matricule) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule) VALUES (?, ?, ?, ?, ?)";
             pst = con.prepareStatement(query);
             pst.setString(1, nom);
             pst.setString(2, prenom);
@@ -121,10 +130,8 @@ public class EtudiantsForm extends JFrame {
             pst.setString(5, matricule);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this,
-                    "Inscription Réussie",
-                    "Succès",
-                    JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Inscription Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            resetFields();  //pour vider les champs après l'inscription
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -144,7 +151,7 @@ public class EtudiantsForm extends JFrame {
         }
 
         try {
-            String query = "UPDATE etudiant SET Nom = ?, Prenom = ?, Email = ?, Adresse = ? WHERE Matricule = ?";
+            String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ? WHERE Matricule = ?";
             pst = con.prepareStatement(query);
             pst.setString(1, nom);
             pst.setString(2, prenom);
@@ -153,11 +160,8 @@ public class EtudiantsForm extends JFrame {
             pst.setString(5, matricule);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this,
-                    "Modification Réussie",
-                    "Succès",
-                    JOptionPane.INFORMATION_MESSAGE);
-
+            JOptionPane.showMessageDialog(this, "Modification Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            resetFields();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -172,16 +176,13 @@ public class EtudiantsForm extends JFrame {
         }
 
         try {
-            String query = "DELETE FROM etudiant WHERE Matricule = ?";
+            String query = "DELETE FROM Etudiant WHERE Matricule = ?";
             pst = con.prepareStatement(query);
             pst.setString(1, matricule);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this,
-                    "Suppression Réussie",
-                    "Succès",
-                    JOptionPane.INFORMATION_MESSAGE);
-
+            JOptionPane.showMessageDialog(this, "Suppression Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            resetFields();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -196,17 +197,17 @@ public class EtudiantsForm extends JFrame {
         }
 
         try {
-            String query = "SELECT * FROM etudiant WHERE Matricule = ? OR Nom = ?";
+            String query = "SELECT * FROM Etudiant WHERE Matricule = ? OR NomEtudiant = ?";
             pst = con.prepareStatement(query);
             pst.setString(1, recherche);
             pst.setString(2, recherche);
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                tfNom.setText(rs.getString("Nom"));
-                tfPrenom.setText(rs.getString("Prenom"));
-                tfEmail.setText(rs.getString("Email"));
-                tfAdresse.setText(rs.getString("Adresse"));
+                tfNom.setText(rs.getString("NomEtudiant"));
+                tfPrenom.setText(rs.getString("PrenomEtudiant"));
+                tfEmail.setText(rs.getString("EmailEtudiant"));
+                tfAdresse.setText(rs.getString("AdresseEtudiant"));
                 tfMatricule.setText(rs.getString("Matricule"));
             } else {
                 JOptionPane.showMessageDialog(this, "Etudiant non trouvé", "Attention", JOptionPane.ERROR_MESSAGE);

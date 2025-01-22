@@ -52,14 +52,14 @@ public class LoginForm extends JDialog {
     private User getAuthentificateUser(String email, String password, String role) {
         User user = null;
 
-        final String DB_URL = "jdbc:mysql://localhost/GestionDesAbsences_Uta?serverTimeZone=UTC";
-        final String USERNAME = "root";
-        final String PASSWORD = "";
+        final String DB_URL = "jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta";
+        final String USERNAME = "postgres";
+        final String PASSWORD = "29122003";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             String sql = "";
             if ("Admin".equals(role)) {
-                sql = "SELECT * FROM Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Admin'";
+                sql = "SELECT * FROM public.Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Admin'";
             } else if ("Enseignant".equals(role)) {
                 sql = "SELECT * FROM Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Enseignant'";
             }

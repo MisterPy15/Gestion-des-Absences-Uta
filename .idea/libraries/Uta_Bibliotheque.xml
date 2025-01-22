@@ -7,6 +7,7 @@
       <root url="jar://$PROJECT_DIR$/Uta Bibliotheque/mysql-connector-j-8.4.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/Uta Bibliotheque/jcommon-1.0.23.jar!/" />
       <root url="jar://$PROJECT_DIR$/Uta Bibliotheque/rs2xml.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Uta Bibliotheque/postgresql-42.7.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

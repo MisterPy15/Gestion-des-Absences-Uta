@@ -1,18 +1,19 @@
-import com.toedter.calendar.JDateChooser;
 import net.proteanit.sql.DbUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class EnseignantsForm extends JFrame {
-    private JPanel ReservationPanel;
-    private JTextField tfTitreLivre;
+    private JPanel EnseignantPanel;
+    private JTextField tfNom;
     private JTextField tfRecherche;
     private JButton btnRcherche;
     private JButton btnCreer;
@@ -20,19 +21,17 @@ public class EnseignantsForm extends JFrame {
     private JButton btnSupprimer;
     private JButton btnViderChamps;
     private JTable table1;
-    private JTextField tfIdLivre;
-    private JTextField tfIdAdhrent;
-    private JPanel DateReservePanel;
-    private JPanel DateRappelDispoPanel;
-    private JLabel lbNbrReserve;
+    private JTextField tfAdresse;
+    private JTextField tfIdEmail;
+    private JTextField tfPrenom;
+    private JPasswordField pfMotdePasse;
+    private JTextField tfNumTel;
     private Connection con;
     private PreparedStatement pst;
-    private JDateChooser dateReserve;
-    private JDateChooser dateRappeldeDispo;
 
     public EnseignantsForm() {
-        setTitle("Gestion des Réservations");
-        setContentPane(ReservationPanel);
+        setTitle("Gestion des Enseignants");
+        setContentPane(EnseignantPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
         setVisible(true);
@@ -41,20 +40,6 @@ public class EnseignantsForm extends JFrame {
 
         connect();
         table_load();
-
-        // Initialisation de JDateChooser
-        dateReserve = new JDateChooser();
-        DateReservePanel.setLayout(new BorderLayout());
-        DateReservePanel.add(dateReserve, BorderLayout.CENTER);
-
-        dateRappeldeDispo = new JDateChooser();
-        DateRappelDispoPanel.setLayout(new BorderLayout());
-        DateRappelDispoPanel.add(dateRappeldeDispo, BorderLayout.CENTER);
-
-        DateReservePanel.revalidate();
-        DateReservePanel.repaint();
-        DateRappelDispoPanel.revalidate();
-        DateRappelDispoPanel.repaint();
 
         btnViderChamps.addActionListener(new ActionListener() {
             @Override
@@ -66,37 +51,50 @@ public class EnseignantsForm extends JFrame {
         btnSupprimer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteReservation();
+                deleteEnseignant();
             }
         });
 
         btnModifier.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateReservation();
+                updateEnseignant();
             }
         });
 
         btnCreer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createReservation();
+                createEnseignant();
             }
         });
 
         btnRcherche.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchReservation();
+                searchEnseignant();
+            }
+        });
+
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int row = table1.getSelectedRow();
+                tfNom.setText(table1.getModel().getValueAt(row, 1).toString());
+                tfPrenom.setText(table1.getModel().getValueAt(row, 2).toString());
+                pfMotdePasse.setText(table1.getModel().getValueAt(row, 3).toString());
+                tfNumTel.setText(table1.getModel().getValueAt(row, 4).toString());
+                tfAdresse.setText(table1.getModel().getValueAt(row, 5).toString());
+                tfIdEmail.setText(table1.getModel().getValueAt(row, 6).toString());
             }
         });
     }
 
     public void connect() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
-            System.out.println("Connexion réussie");
+            Class.forName("com.postgresql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
+            System.out.println("Succès");
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
@@ -104,243 +102,172 @@ public class EnseignantsForm extends JFrame {
 
     private void table_load() {
         try {
-            pst = con.prepareStatement("SELECT * FROM réservation");
+            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse, u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id";
+            pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
     private void ViderChamps() {
-        tfTitreLivre.setText("");
-        tfIdLivre.setText("");
-        tfIdAdhrent.setText("");
-        lbNbrReserve.setText("Nombre de Réservation : 0");
-        dateReserve.setDate(null);
-        dateRappeldeDispo.setDate(null);
+        tfNom.setText("");
+        tfAdresse.setText("");
+        tfIdEmail.setText("");
         tfRecherche.setText("");
+        tfPrenom.setText("");
+        pfMotdePasse.setText("");
+        tfNumTel.setText("");
     }
 
-    private void searchReservation() {
+    private void searchEnseignant() {
         try {
-            String idReserve = tfRecherche.getText();
-            pst = con.prepareStatement("SELECT Nom_Livre, Date_réservation, Rappel_de_disponibilité, Id_Livre, Id_Adhérent FROM réservation WHERE Id_Réservation=?");
-            pst.setString(1, idReserve);
+            String recherche = tfRecherche.getText();
+            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse," +
+                            " u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
+            pst = con.prepareStatement(query);
+            pst.setString(1, "%" + recherche + "%");
+            pst.setString(2, "%" + recherche + "%");
             ResultSet rs = pst.executeQuery();
+            table1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-            if (rs.next()) {
-                String Titre = rs.getString(1);
-                Date DateReserve = rs.getDate(2);
-                Date DateRapelledeDispo = rs.getDate(3);
-                String idlivre = rs.getString(4);
-                String idadherent = rs.getString(5);
-
-                tfTitreLivre.setText(Titre);
-                dateReserve.setDate(DateReserve);
-                dateRappeldeDispo.setDate(DateRapelledeDispo);
-                tfIdLivre.setText(idlivre);
-                tfIdAdhrent.setText(idadherent);
-
-                // Obtenir le nom de l'adhérent
-                String adherentName = getAdherentNameById(idadherent);
-                lbNbrReserve.setText("Adhérent: " + adherentName);
-
-                // Compter le nombre de réservations pour l'adhérent
-                int nbrReserve = countReservationsForAdherent(idadherent);
-                lbNbrReserve.setText(lbNbrReserve.getText() + " | Réservations: " + nbrReserve);
-            } else {
-                ViderChamps();
-                JOptionPane.showMessageDialog(null, "Id réservation invalide", "Attention", JOptionPane.ERROR_MESSAGE);
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
             }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void createEnseignant() {
+        String nom = tfNom.getText();
+        String prenom = tfPrenom.getText();
+        String adresse = tfAdresse.getText();
+        String email = tfIdEmail.getText();
+        String motDePasse = new String(pfMotdePasse.getPassword());
+        String numTel = tfNumTel.getText();
+
+        if (nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || email.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String hashedPassword = hashPassword(motDePasse);
+
+        try {
+            String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, Email, Role) VALUES (?, ?, ?, ?, ?, ?, 'Enseignant')";
+            pst = con.prepareStatement(queryUtilisateur, Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, hashedPassword);
+            pst.setString(4, numTel);
+            pst.setString(5, adresse);
+            pst.setString(6, email);
+            pst.executeUpdate();
+
+            ResultSet generatedKeys = pst.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int utilisateurId = generatedKeys.getInt(1);
+
+                String queryEnseignant = "INSERT INTO Enseignant (Num_Tel, IdUtilsateur) VALUES (?, ?)";
+                pst = con.prepareStatement(queryEnseignant);
+                pst.setString(1, numTel);
+                pst.setInt(2, utilisateurId);
+                pst.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Enseignant Créé", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 table_load();
-
+                ViderChamps();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private int countReservationsForAdherent(String idAdherent) throws SQLException {
-        pst = con.prepareStatement("SELECT COUNT(*) FROM réservation WHERE Id_Adhérent=?");
-        pst.setString(1, idAdherent);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1);
-        } else {
-            return 0;
-        }
-    }
-
-    private boolean livreExists(String titreLivre) throws SQLException {
-        pst = con.prepareStatement("SELECT * FROM livre WHERE Titre=?");
-        pst.setString(1, titreLivre);
-        ResultSet rs = pst.executeQuery();
-        return rs.next();
-    }
-
-    private String getAdherentNameById(String idAdherent) throws SQLException {
-        pst = con.prepareStatement("SELECT Nom FROM adhérent WHERE Id_Adhérent=?");
-        pst.setString(1, idAdherent);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            return rs.getString("Nom");
-        } else {
-            return "Adhérent Inconnu";
-        }
-    }
-
-
-    private boolean adherentExists(String idAdherent) throws SQLException {
-        pst = con.prepareStatement("SELECT * FROM adhérent WHERE Id_Adhérent=?");
-        pst.setString(1, idAdherent);
-        ResultSet rs = pst.executeQuery();
-        return rs.next();
-    }
-
-    private int countNonReturnedBooks(String idAdherent) throws SQLException {
-        pst = con.prepareStatement("SELECT COUNT(*) FROM emprunt WHERE Id_Adhérent=? AND Date_Retour IS NULL");
-        pst.setString(1, idAdherent);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1);
-        }
-        return 0;
-    }
-
-    private void createReservation() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdhrent.getText();
-        Date dateReserveValue = dateReserve.getDate();
-
-        if (TitreLivre.isEmpty() || IdAdherent.isEmpty() || dateReserveValue == null) {
-            JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
+    private void updateEnseignant() {
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un enseignant dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            if (!livreExists(TitreLivre)) {
-                JOptionPane.showMessageDialog(this, "Le livre avec le titre " + TitreLivre + " n'existe pas", "Attention", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        String nom = tfNom.getText();
+        String prenom = tfPrenom.getText();
+        String adresse = tfAdresse.getText();
+        String email = tfIdEmail.getText();
+        String motDePasse = new String(pfMotdePasse.getPassword());
+        String numTel = tfNumTel.getText();
+        int idEnseignant = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
 
-            if (!adherentExists(IdAdherent)) {
-                JOptionPane.showMessageDialog(this, "L'adhérent " + IdAdherent + " n'existe pas", "Attention", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (countNonReturnedBooks(IdAdherent) >= 2) {
-                JOptionPane.showMessageDialog(this, "L'adhérent " + IdAdherent + " a déjà emprunté 2 livres non retournés", "Attention", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDateReserve = dateFormat.format(dateReserveValue);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateReserveValue);
-            cal.add(Calendar.DAY_OF_YEAR, 14);
-            Date dateRappelValue = cal.getTime();
-
-            String formattedDateRappel = dateFormat.format(dateRappelValue);
-
-            String query = "INSERT INTO réservation (Nom_Livre, Date_réservation, Rappel_de_disponibilité, Nbre_Réservation, Id_Livre, Id_Adhérent) VALUES (?, ?, ?, ?, ?, ?)";
-            pst = con.prepareStatement(query);
-            pst.setString(1, TitreLivre);
-            pst.setString(2, formattedDateReserve);
-            pst.setString(3, formattedDateRappel);
-            pst.setInt(4, 1);  // Initialisation à 1 pour une nouvelle réservation
-            pst.setString(5, tfIdLivre.getText());
-            pst.setString(6, IdAdherent);
-            pst.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Réservation Créée", "Succès", JOptionPane.INFORMATION_MESSAGE);
-
-            // Update the number of reservations for the adherent
-            int nbrReserve = countReservationsForAdherent(IdAdherent);
-            String adherentName = getAdherentNameById(IdAdherent);
-            lbNbrReserve.setText("Adhérent: " + adherentName + " | Réservations: " + nbrReserve);
-
-
-            ViderChamps();
-            table_load();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void updateReservation() {
-        String TitreLivre = tfTitreLivre.getText();
-        String IdAdherent = tfIdAdhrent.getText();
-        Date dateReserveValue = dateReserve.getDate();
-        String idReserve = tfRecherche.getText();
-
-        if (TitreLivre.isEmpty() || IdAdherent.isEmpty() || dateReserveValue == null || idReserve.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
+        if (nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || email.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Svp remplissez tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        String hashedPassword = hashPassword(motDePasse);
+
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDateReserve = dateFormat.format(dateReserveValue);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateReserveValue);
-            cal.add(Calendar.DAY_OF_YEAR, 14);
-            Date dateRappelValue = cal.getTime();
-
-            String formattedDateRappel = dateFormat.format(dateRappelValue);
-
-            String query = "UPDATE réservation SET Nom_Livre=?, Date_réservation=?, Rappel_de_disponibilité=?, Id_Livre=?, Id_Adhérent=? WHERE Id_Réservation=?";
-            pst = con.prepareStatement(query);
-            pst.setString(1, TitreLivre);
-            pst.setString(2, formattedDateReserve);
-            pst.setString(3, formattedDateRappel);
-            pst.setString(4, tfIdLivre.getText());
-            pst.setString(5, IdAdherent);
-            pst.setString(6, idReserve);
+            String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? WHERE Id = (SELECT IdUtilsateur FROM Enseignant WHERE Id = ?)";
+            pst = con.prepareStatement(queryUtilisateur);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, hashedPassword);
+            pst.setString(4, numTel);
+            pst.setString(5, adresse);
+            pst.setString(6, email);
+            pst.setInt(7, idEnseignant);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Réservation Modifiée", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            ViderChamps();
+            JOptionPane.showMessageDialog(this, "Enseignant modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
             table_load();
+            ViderChamps();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void deleteReservation() {
-        String idReserve = tfRecherche.getText();
-
-        if (idReserve.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Svp Recherchez et Sélectionnez une Réservation à Supprimer", "Attention", JOptionPane.ERROR_MESSAGE);
+    private void deleteEnseignant() {
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un enseignant dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        int idEnseignant = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
+
         try {
-            String query = "DELETE FROM réservation WHERE Id_Réservation=?";
-            pst = con.prepareStatement(query);
-            pst.setString(1, idReserve);
+            String queryEnseignant = "DELETE FROM Enseignant WHERE Id = ?";
+            pst = con.prepareStatement(queryEnseignant);
+            pst.setInt(1, idEnseignant);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Réservation Supprimée", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            ViderChamps();
+            String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT IdUtilsateur FROM Enseignant WHERE Id = ?)";
+            //String queryUtilisateurEns = "DELETE FROM Utilisateur WHERE Id = ?";
+
+            pst = con.prepareStatement(queryUtilisateur);
+            pst.setInt(1, idEnseignant);
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Enseignant supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
             table_load();
+            ViderChamps();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
-
-    private void updateDateRappelLivreRetourner(String idLivre) {
-        try {
-            String query = "UPDATE réservation SET Rappel_de_disponibilité = CURDATE() WHERE Id_Livre = ? AND Rappel_de_disponibilité IS NULL";
-            pst = con.prepareStatement(query);
-            pst.setString(1, idLivre);
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
     public static void main(String[] args) {
         new EnseignantsForm();
