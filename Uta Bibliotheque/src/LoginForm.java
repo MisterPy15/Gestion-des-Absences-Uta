@@ -59,7 +59,7 @@ public class LoginForm extends JDialog {
         try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             String sql = "";
             if ("Admin".equals(role)) {
-                sql = "SELECT * FROM Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Admin'";
+                sql = "SELECT * FROM public.Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Admin'";
             } else if ("Enseignant".equals(role)) {
                 sql = "SELECT * FROM Utilisateur WHERE Email=? AND MotDePasse=? AND Role='Enseignant'";
             }
