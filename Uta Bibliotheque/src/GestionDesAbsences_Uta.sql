@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 20 jan. 2025 à 14:01
+-- Généré le : mar. 21 jan. 2025 à 21:46
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -150,7 +150,10 @@ CREATE TABLE `Utilisateur` (
 INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `NumTel`, `Adresse`, `Email`, `Role`) VALUES
 (1, 'Mr', 'Py', 'py1234', NULL, 'Yopougon', 'py@gmail.com', 'Admin'),
 (3, 'agoh', 'chris', 'f97366bc05d3fdb27fbf72a024dd8f62973059264e3c1fb2f4e7512d96e649ff', 778748602, 'Adjamé', 'chris@gmail.com', 'Enseignant'),
-(5, 'kouakou', 'Yann', 'de34ddf5af5bcbda0219a7280880a0b7c6ae7b12885160996fe3effaa67733a3', 89792682, 'Poy', 'kyann@gmail.com', 'Enseignant');
+(5, 'kouakou', 'Yann', 'de34ddf5af5bcbda0219a7280880a0b7c6ae7b12885160996fe3effaa67733a3', 89792682, 'Poy', 'kyann@gmail.com', 'Enseignant'),
+(6, 'Wongniga', 'seydou soro', '756bc47cb5215dc3329ca7e1f7be33a2dad68990bb94b76d90aa07f4e44a233a', 78987879, 'bingerville', 'w@gmail.com', 'Enseignant'),
+(7, 'agoh', 'chris', '9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0', 778748602, 'Adjamé', 'py@gmail.com', 'Enseignant'),
+(8, 'Mr', 'Py', 'py1234', 778748602, 'Yopougon', 'py@gmail.com', 'Admin');
 
 --
 -- Index pour les tables déchargées
@@ -225,7 +228,7 @@ ALTER TABLE `Absence`
 -- AUTO_INCREMENT pour la table `Administrateur`
 --
 ALTER TABLE `Administrateur`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `Cours`
@@ -237,7 +240,7 @@ ALTER TABLE `Cours`
 -- AUTO_INCREMENT pour la table `Enseignant`
 --
 ALTER TABLE `Enseignant`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `Etudiant`
@@ -261,7 +264,7 @@ ALTER TABLE `Module`
 -- AUTO_INCREMENT pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Contraintes pour les tables déchargées
