@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="LivrePanel" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="942" height="718"/>
+      <xy x="20" y="20" width="942" height="735"/>
     </constraints>
     <properties>
       <background color="-1380097"/>
@@ -28,12 +28,12 @@
             <properties>
               <font name="Monaco" size="48" style="1"/>
               <foreground color="-16128660"/>
-              <text value="GESTION LIVRE"/>
+              <text value="GESTION DES ABSENCES"/>
             </properties>
           </component>
         </children>
       </grid>
-      <grid id="e264e" layout-manager="GridLayoutManager" row-count="16" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="e264e" layout-manager="GridLayoutManager" row-count="13" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -95,7 +95,7 @@
           </component>
           <component id="e14aa" class="javax.swing.JLabel">
             <constraints>
-              <grid row="14" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="11" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -119,7 +119,7 @@
           </vspacer>
           <component id="2ddfc" class="javax.swing.JButton" binding="btnRecherche">
             <constraints>
-              <grid row="14" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -128,7 +128,7 @@
           </component>
           <component id="3903e" class="javax.swing.JTextField" binding="tfRecherche">
             <constraints>
-              <grid row="15" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="12" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
@@ -162,60 +162,6 @@
               <font name="JetBrains Mono" size="16" style="0"/>
             </properties>
           </component>
-          <component id="c56e7" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="12" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Monaco" size="18" style="1"/>
-              <text value="Date de Parution"/>
-            </properties>
-          </component>
-          <grid id="df568" binding="DateParutionPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <grid row="13" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="20"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font name="JetBrains Mono" size="16" style="0"/>
-            </properties>
-            <border type="none"/>
-            <children/>
-          </grid>
-          <grid id="c1119" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-            <border type="none" title="Photo" title-justification="2" title-position="2">
-              <font name="Monaco" size="18" style="1"/>
-            </border>
-            <children>
-              <component id="b54" class="javax.swing.JLabel" binding="lbPhoto">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <icon value="image (1).png"/>
-                  <text value=""/>
-                </properties>
-              </component>
-            </children>
-          </grid>
-          <component id="c5725" class="javax.swing.JButton" binding="btnSelection">
-            <constraints>
-              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="20"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font name="Fira Code" size="18" style="1"/>
-              <text value="Sélectioner"/>
-            </properties>
-          </component>
         </children>
       </grid>
       <grid id="4ba1" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -237,7 +183,7 @@
             <properties>
               <font name="Fira Code" size="18" style="2"/>
             </properties>
-            <border type="line" title="Livres" title-justification="2" title-position="2">
+            <border type="line" title="Absences" title-justification="2" title-position="2">
               <font name="Zapfino" size="22" style="1"/>
               <color color="-16742445"/>
             </border>

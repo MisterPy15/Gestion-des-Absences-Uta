@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 
+public class ModuleForm extends JFrame {
 
-public class ModuleForm extends JFrame{
-
-    private JTextField tfTitreLivre;
-    private JTextField tfNbrExemplaire;
-    private JTextField tfEmplacement;
+    private JTextField tfNomModule;
+    private JTextField tfCoefficient;
     private JTextField tfRecherche;
     private JButton btnRcherche;
     private JTable table1;
@@ -19,14 +19,12 @@ public class ModuleForm extends JFrame{
     private JButton btnModifier;
     private JButton btnSupprimer;
     private JButton btnViderChamps;
-    private JComboBox cbEtatLivre;
     private JPanel StockPanel;
     private Connection con;
     private PreparedStatement pst;
 
-
-    public ModuleForm(){
-        setTitle("Gestion Du Stock");
+    public ModuleForm() {
+        setTitle("Gestion Des Modules");
         setContentPane(StockPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
@@ -38,61 +36,60 @@ public class ModuleForm extends JFrame{
         connect();
         table_load();
 
-
         btnRcherche.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rechercherLivreStock();
+                searchModule();
             }
         });
-
         btnCreer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createStock();
+                createModule();
             }
         });
-
         btnModifier.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                modifyStock();
+                modifyModule();
             }
         });
-
         btnSupprimer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteLivreStock();
+                deleteModule();
             }
         });
-
         btnViderChamps.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViderChamps();
             }
         });
+
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table1.getSelectedRow();
+                tfNomModule.setText(table1.getModel().getValueAt(row, 1).toString());
+                tfCoefficient.setText(table1.getModel().getValueAt(row, 2).toString());
+            }
+        });
     }
-
-
-
 
     public void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
-            System.out.println("Connecter");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
+            System.out.println("Connexion réussie");
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    void table_load() {
+    private void table_load() {
         try {
-            pst = con.prepareStatement("SELECT * FROM stock");
+            pst = con.prepareStatement("SELECT * FROM Module");
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
@@ -100,182 +97,122 @@ public class ModuleForm extends JFrame{
         }
     }
 
-    private void ViderChamps(){
-
-        tfTitreLivre.setText("");
-        tfNbrExemplaire.setText("");
-        cbEtatLivre.setSelectedItem("Disponible");
-        tfEmplacement.setText("");
+    private void ViderChamps() {
+        tfNomModule.setText("");
+        tfCoefficient.setText("");
         tfRecherche.setText("");
+        table_load();
     }
 
-    private void rechercherLivreStock() {
-        String recherche = tfRecherche.getText();
+    private void createModule() {
+        String nomModule = tfNomModule.getText();
+        String coefficient = tfCoefficient.getText();
 
-        if (recherche.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez entrer Le Titre du livre ou l'Id", "Attention", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            String query = "SELECT Titre, Nbr_Exemplaire_Livre, Etat_Livre, Emplacement FROM stock WHERE Titre LIKE ? OR Id_Stock LIKE ?";
-            pst = con.prepareStatement(query);
-            pst.setString(1, "%" + recherche + "%");
-            pst.setString(2, "%" + recherche + "%");
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                String titre = rs.getString(1);
-                String nbrExmplaire = rs.getString(2);
-                String etatLivre = (String) rs.getString(3);
-                String emplacement = rs.getString(4);
-
-                tfTitreLivre.setText(titre);
-                tfNbrExemplaire.setText(nbrExmplaire);
-                cbEtatLivre.setSelectedItem(etatLivre);
-                tfEmplacement.setText(emplacement);
-            } else {
-                ViderChamps();
-                JOptionPane.showMessageDialog(this, "Aucun Livre trouvé pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            table1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erreur lors de la recherche", "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private boolean isLivreDisponible(String titreLivre) throws SQLException {
-        String query = "SELECT Nbr_Exemplaire_Livre FROM stock WHERE Titre = ?";
-        pst = con.prepareStatement(query);
-        pst.setString(1, titreLivre);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            int nbrExemplaire = rs.getInt(1);
-            return nbrExemplaire > 0;
-        }
-        return false;
-    }
-
-
-    private void createStock() {
-        String titreLivre = tfTitreLivre.getText();
-        String nbrExmplaire = tfNbrExemplaire.getText();
-        String etatLivre = (String) cbEtatLivre.getSelectedItem();
-        String Emplacement = tfEmplacement.getText();
-
-
-        if (titreLivre.isEmpty() || nbrExmplaire.isEmpty() || etatLivre == null || Emplacement.isEmpty()) {
+        if (nomModule.isEmpty() || coefficient.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String query = "INSERT INTO stock (Titre, Nbr_Exemplaire_Livre, Etat_Livre, Emplacement) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO Module (NomModule, Coefficient_Module) VALUES (?, ?)";
             pst = con.prepareStatement(query);
-            pst.setString(1, titreLivre);
-            pst.setString(2, nbrExmplaire);
-            pst.setString(3, etatLivre);
-            pst.setString(4, Emplacement);
-
+            pst.setString(1, nomModule);
+            pst.setString(2, coefficient);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Ajout Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-
-           ViderChamps();
-           table_load();
-
+            JOptionPane.showMessageDialog(this, "Module Créé", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            ViderChamps();
+            table_load();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+    private void modifyModule() {
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un module dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    private boolean livreExists(String TitreLivre) throws SQLException {
-        String query = "SELECT COUNT(*) FROM livre WHERE Titre = ?";
-        pst = con.prepareStatement(query);
-        pst.setString(1, TitreLivre);
-        ResultSet rs = pst.executeQuery();
-        rs.next();
-        return rs.getInt(1) > 0;
-    }
+        String nomModule = tfNomModule.getText();
+        String coefficient = tfCoefficient.getText();
+        int moduleId = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
 
-
-    private void modifyStock() {
-        String titre = tfTitreLivre.getText();
-
-        if ( titre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
+        if (nomModule.isEmpty() || coefficient.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Svp remplissez tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            if (!livreExists( titre)) {
-                JOptionPane.showMessageDialog(this, "Le livre avec le titre " +  titre + " n'existe pas", "Attention", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String nbrExemplaire = tfNbrExemplaire.getText();
-            String etatLIvre = (String) cbEtatLivre.getSelectedItem();
-            String emplacement = tfEmplacement.getText();
-
-            String query = "UPDATE stock SET Titre=?, Nbr_Exemplaire_Livre=?, Etat_Livre=?, Emplacement=? WHERE Titre=?";
+            String query = "UPDATE Module SET NomModule = ?, Coefficient_Module = ? WHERE Id = ?";
             pst = con.prepareStatement(query);
-            pst.setString(1, titre);
-            pst.setString(2, nbrExemplaire);
-            pst.setString(3, etatLIvre);
-            pst.setString(4, emplacement);
-            pst.setString(5, titre);
-            int rowsUpdated = pst.executeUpdate();
+            pst.setString(1, nomModule);
+            pst.setString(2, coefficient);
+            pst.setInt(3, moduleId);
+            pst.executeUpdate();
 
-            if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(this, "Modification réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                ViderChamps();
-                table_load();
-            } else {
-                JOptionPane.showMessageDialog(this, "Aucun livre trouvé avec ce Titre", "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "Module modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            ViderChamps();
+            table_load();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+    private void deleteModule() {
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un module dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    private void deleteLivreStock() {
-        String titre = tfTitreLivre.getText();
+        int moduleId = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
 
-        if (titre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
+        try {
+            String query = "DELETE FROM Module WHERE Id = ?";
+            pst = con.prepareStatement(query);
+            pst.setInt(1, moduleId);
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Module supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            ViderChamps();
+            table_load();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void searchModule() {
+        String recherche = tfRecherche.getText();
+
+        if (recherche.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez entrer un texte pour la recherche", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String query = "DELETE FROM stock WHERE Titre=?";
+            String query = "SELECT * FROM Module WHERE NomModule LIKE ?";
             pst = con.prepareStatement(query);
-            pst.setString(1, titre);
-            int rowsDeleted = pst.executeUpdate();
+            pst.setString(1, "%" + recherche + "%");
+            ResultSet rs = pst.executeQuery();
 
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(this, "Suppression réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                ViderChamps();
-                table_load();
+            if (rs.next()) {
+                tfNomModule.setText(rs.getString("NomModule"));
+                tfCoefficient.setText(rs.getString("Coefficient_Module"));
             } else {
-                JOptionPane.showMessageDialog(this, "Aucun emprunt trouvé avec ce titre de livre et cet identifiant d'adhérent", "Erreur", JOptionPane.ERROR_MESSAGE);
+                ViderChamps();
+                JOptionPane.showMessageDialog(this, "Aucun module trouvé pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
+
+            table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors de la recherche des modules", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
-
-
-
-
 
     public static void main(String[] args) {
         new ModuleForm();
     }
-
 }
