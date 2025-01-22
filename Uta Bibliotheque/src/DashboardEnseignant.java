@@ -20,8 +20,9 @@ public class DashboardEnseignant extends JFrame {
     private Connection con;
     private PreparedStatement pst;
     private JLabel lblDateHeure;
+    private String dbType = "mysql"; // Change to "postgresql" for PostgreSQL
 
-    public AbsenceForm() {
+    public DashboardEnseignant() {
         setTitle("Tableau de Bord Enseignant");
         setSize(750, 500);
         setLocationRelativeTo(null);
@@ -45,7 +46,7 @@ public class DashboardEnseignant extends JFrame {
 
         // Ajouter le texte "Enseignant(e) : Kouakou Yann" à droite
         JLabel lblEnseignant = new JLabel("Enseignant(e) : Kouakou Yann / Id : 3");
-        
+
         // Utilisation de FlowLayout.RIGHT pour aligner le texte à droite
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.add(lblEnseignant);
@@ -155,19 +156,17 @@ public class DashboardEnseignant extends JFrame {
     }
 
     public void connect() {
-        String url = "jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta";
-        String user = "postgres";
-        String password = "29122003";
-
         try {
-            Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection(url, user, password);
-            System.out.println("Connexion réussie à la base de données");
-        } catch (ClassNotFoundException | SQLException ex) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
+            System.out.println("Succès");
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données", "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
+
 
     // Affichage des étudiants selon la filière et niveau sélectionnés
     private void filiereSelectionnee() {
@@ -205,7 +204,7 @@ public class DashboardEnseignant extends JFrame {
 
     private void ajouterAbsence() {
         if (tfMatricule.getText().isEmpty() || tfDateAbsence.getText().isEmpty() ||
-            tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
+                tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez renseigner tous les champs.", "Champs vides", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -228,7 +227,7 @@ public class DashboardEnseignant extends JFrame {
 
     private void modifierAbsence() {
         if (tfMatricule.getText().isEmpty() || tfDateAbsence.getText().isEmpty() ||
-            tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
+                tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez renseigner tous les champs.", "Champs vides", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -274,6 +273,6 @@ public class DashboardEnseignant extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(AbsenceForm::new);
+        SwingUtilities.invokeLater(DashboardEnseignant::new);
     }
 }
