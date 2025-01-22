@@ -52,9 +52,15 @@ public class LoginForm extends JDialog {
     private User getAuthentificateUser(String email, String password, String role) {
         User user = null;
 
+<<<<<<< HEAD
         final String DB_URL = "jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta";
         final String USERNAME = "postgres";
         final String PASSWORD = "29122003";
+=======
+        final String DB_URL = "jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC";
+        final String USERNAME = "root";
+        final String PASSWORD = "";
+>>>>>>> 62ee3580e66de9daf68d5045cd4be9f1180ffef8
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             String sql = "";

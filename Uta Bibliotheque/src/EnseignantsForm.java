@@ -90,15 +90,27 @@ public class EnseignantsForm extends JFrame {
         });
     }
 
+
     public void connect() {
         try {
+<<<<<<< HEAD
             Class.forName("com.postgresql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
             System.out.println("Succès");
         } catch (ClassNotFoundException | SQLException ex) {
+=======
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
+            System.out.println("Succès");
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+>>>>>>> 62ee3580e66de9daf68d5045cd4be9f1180ffef8
             ex.printStackTrace();
         }
     }
+
+
 
     private void table_load() {
         try {
