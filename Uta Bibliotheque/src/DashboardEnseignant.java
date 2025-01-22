@@ -21,7 +21,7 @@ public class DashboardEnseignant extends JFrame {
     private PreparedStatement pst;
     private JLabel lblDateHeure;
 
-    public DashboardEnseignant() {
+    public AbsenceForm() {
         setTitle("Tableau de Bord Enseignant");
         setSize(750, 500);
         setLocationRelativeTo(null);
@@ -45,7 +45,7 @@ public class DashboardEnseignant extends JFrame {
 
         // Ajouter le texte "Enseignant(e) : Kouakou Yann" à droite
         JLabel lblEnseignant = new JLabel("Enseignant(e) : Kouakou Yann / Id : 3");
-
+        
         // Utilisation de FlowLayout.RIGHT pour aligner le texte à droite
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.add(lblEnseignant);
@@ -139,10 +139,139 @@ public class DashboardEnseignant extends JFrame {
         btnVider.addActionListener(e -> viderChamps());
     }
 
+    // Méthode pour créer un bouton avec des couleurs spécifiques
+    private JButton createButton(String text, Color background, Color foreground) {
+        JButton button = new JButton(text);
+        button.setBackground(background);
+        button.setForeground(foreground);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setPreferredSize(new Dimension(120, 40));
+        return button;
+    }
 
+    private void mettreAJourHeure() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        lblDateHeure.setText(dateFormat.format(new Date()));
+    }
 
+    public void connect() {
+        String url = "jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta";
+        String user = "postgres";
+        String password = "29122003";
 
+        try {
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection(url, user, password);
+            System.out.println("Connexion réussie à la base de données");
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
+    // Affichage des étudiants selon la filière et niveau sélectionnés
+    private void filiereSelectionnee() {
+        String filiereNiveau = (String) cbFiliereNiveau.getSelectedItem();
+
+        try {
+            // Requête pour obtenir les étudiants de la filière et du niveau sélectionnés
+            String query = "SELECT * FROM Etudiant WHERE Filiere_Niveau = ?";
+            pst = con.prepareStatement(query);
+            pst.setString(1, filiereNiveau);
+            ResultSet rs = pst.executeQuery();
+
+            // Création du modèle de table pour afficher les résultats
+            DefaultTableModel model = new DefaultTableModel();
+            model.setColumnIdentifiers(new String[]{"Matricule", "Nom", "Prénom", "Filière_Niveau", "EmailEtudiant", "IdFormation"});
+
+            // Remplir la table avec les résultats de la requête
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                        rs.getString("Matricule"),
+                        rs.getString("NomEtudiant"),
+                        rs.getString("PrenomEtudiant"),
+                        rs.getString("Filiere_Niveau"),
+                        rs.getString("EmailEtudiant"),
+                        rs.getString("IdFormation")
+                });
+            }
+
+            // Affichage des résultats dans la JTable
+            tableEtudiants.setModel(model);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void ajouterAbsence() {
+        if (tfMatricule.getText().isEmpty() || tfDateAbsence.getText().isEmpty() ||
+            tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez renseigner tous les champs.", "Champs vides", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            String query = "INSERT INTO Absences (Matricule, DateAbsence, Motif, Duree) VALUES (?, ?, ?, ?)";
+            pst = con.prepareStatement(query);
+            pst.setString(1, tfMatricule.getText());
+            pst.setString(2, tfDateAbsence.getText());
+            pst.setString(3, tfMotif.getText());
+            pst.setString(4, tfDuree.getText());
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Absence ajoutée avec succès.");
+            viderChamps();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de l'absence.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void modifierAbsence() {
+        if (tfMatricule.getText().isEmpty() || tfDateAbsence.getText().isEmpty() ||
+            tfMotif.getText().isEmpty() || tfDuree.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez renseigner tous les champs.", "Champs vides", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            String query = "UPDATE Absences SET DateAbsence = ?, Motif = ?, Duree = ? WHERE Matricule = ?";
+            pst = con.prepareStatement(query);
+            pst.setString(1, tfDateAbsence.getText());
+            pst.setString(2, tfMotif.getText());
+            pst.setString(3, tfDuree.getText());
+            pst.setString(4, tfMatricule.getText());
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Absence modifiée avec succès.");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors de la modification de l'absence.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void supprimerAbsence() {
+        if (tfMatricule.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez saisir le matricule de l'étudiant.", "Champs vides", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            String query = "DELETE FROM Absences WHERE Matricule = ?";
+            pst = con.prepareStatement(query);
+            pst.setString(1, tfMatricule.getText());
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Absence supprimée avec succès.");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors de la suppression de l'absence.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void viderChamps() {
+        tfMatricule.setText("");
+        tfDateAbsence.setText("");
+        tfMotif.setText("");
+        tfDuree.setText("");
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AbsenceForm::new);
