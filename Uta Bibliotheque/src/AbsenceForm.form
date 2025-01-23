@@ -33,7 +33,11 @@
           </component>
         </children>
       </grid>
+<<<<<<< HEAD
       <grid id="e264e" layout-manager="GridLayoutManager" row-count="17" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+=======
+      <grid id="e264e" layout-manager="GridLayoutManager" row-count="11" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -68,7 +72,11 @@
           </component>
           <component id="520c3" class="javax.swing.JLabel">
             <constraints>
+<<<<<<< HEAD
               <grid row="9" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+=======
+              <grid row="3" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -77,16 +85,28 @@
           </component>
           <component id="5e1f8" class="javax.swing.JLabel">
             <constraints>
+<<<<<<< HEAD
               <grid row="12" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
               <text value="Semestre"/>
+=======
+              <grid row="6" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Matricule de l'Etudiant"/>
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             </properties>
           </component>
           <component id="e14aa" class="javax.swing.JLabel">
             <constraints>
+<<<<<<< HEAD
               <grid row="15" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+=======
+              <grid row="9" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -110,7 +130,11 @@
           </vspacer>
           <component id="2ddfc" class="javax.swing.JButton" binding="btnRecherche">
             <constraints>
+<<<<<<< HEAD
               <grid row="15" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+=======
+              <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -119,7 +143,11 @@
           </component>
           <component id="3903e" class="javax.swing.JTextField" binding="tfRecherche">
             <constraints>
+<<<<<<< HEAD
               <grid row="16" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+=======
+              <grid row="10" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
@@ -182,10 +210,14 @@
               <grid row="13" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+<<<<<<< HEAD
               <model>
                 <item value="1"/>
                 <item value="2"/>
               </model>
+=======
+              <font name="JetBrains Mono" size="16" style="0"/>
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             </properties>
           </component>
         </children>

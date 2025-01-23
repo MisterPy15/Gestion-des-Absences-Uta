@@ -18,8 +18,11 @@ public class EtudiantsForm extends JFrame {
     private JButton rechercherButton;
     private JTextField tfRecherche;
     private JPanel AdherentPanel;
+<<<<<<< HEAD
     private JComboBox cbSpecialitéNiveau;
     private JButton btnVider;
+=======
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 
     private Connection con;
 
@@ -72,7 +75,9 @@ public class EtudiantsForm extends JFrame {
         }
     }
 
+
     private void loadEtudiants() {
+<<<<<<< HEAD
         String query = "SELECT * FROM Etudiant";
         try (PreparedStatement pst = con.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
@@ -80,14 +85,26 @@ public class EtudiantsForm extends JFrame {
             DefaultTableModel model = new DefaultTableModel(
                     new String[]{"Matricule", "NomEtudiant", "PrenomEtudiant", "EmailEtudiant", "AdresseEtudiant", "SpecialiteNiveau"}, 0);
 
+=======
+        try {
+            String query = "SELECT * FROM Etudiant";
+            pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+
+            DefaultTableModel model = new DefaultTableModel(new String[]{"Matricule", "NomEtudiant", "PrenomEtudiant", "EmailEtudiant", "AdresseEtudiant"}, 0);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             while (rs.next()) {
                 String matricule = rs.getString("Matricule");
                 String nom = rs.getString("NomEtudiant");
                 String prenom = rs.getString("PrenomEtudiant");
                 String email = rs.getString("EmailEtudiant");
                 String adresse = rs.getString("AdresseEtudiant");
+<<<<<<< HEAD
                 String specialiteNiveau = rs.getString("SpecialiteNiveau");
                 model.addRow(new Object[]{matricule, nom, prenom, email, adresse, specialiteNiveau});
+=======
+                model.addRow(new Object[]{matricule, nom, prenom, email, adresse});
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             }
 
             table1.setModel(model);
@@ -104,7 +121,10 @@ public class EtudiantsForm extends JFrame {
         tfAdresse.setText("");
         tfMatricule.setText("");
         tfRecherche.setText("");
+<<<<<<< HEAD
         cbSpecialitéNiveau.setSelectedIndex(-1);
+=======
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
     }
 
     private void createEtudiant() {
@@ -120,8 +140,14 @@ public class EtudiantsForm extends JFrame {
             return;
         }
 
+<<<<<<< HEAD
         String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule, SpecialiteNiveau) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pst = con.prepareStatement(query)) {
+=======
+        try {
+            String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule) VALUES (?, ?, ?, ?, ?)";
+            pst = con.prepareStatement(query);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
@@ -131,7 +157,12 @@ public class EtudiantsForm extends JFrame {
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Inscription Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
+<<<<<<< HEAD
             resetFields();
+=======
+            resetFields();  //pour vider les champs après l'inscription
+
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -150,8 +181,14 @@ public class EtudiantsForm extends JFrame {
             return;
         }
 
+<<<<<<< HEAD
         String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ?, SpecialiteNiveau = ? WHERE Matricule = ?";
         try (PreparedStatement pst = con.prepareStatement(query)) {
+=======
+        try {
+            String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ? WHERE Matricule = ?";
+            pst = con.prepareStatement(query);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
@@ -175,8 +212,14 @@ public class EtudiantsForm extends JFrame {
             return;
         }
 
+<<<<<<< HEAD
         String query = "DELETE FROM Etudiant WHERE Matricule = ?";
         try (PreparedStatement pst = con.prepareStatement(query)) {
+=======
+        try {
+            String query = "DELETE FROM Etudiant WHERE Matricule = ?";
+            pst = con.prepareStatement(query);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst.setString(1, matricule);
             pst.executeUpdate();
 
@@ -195,8 +238,14 @@ public class EtudiantsForm extends JFrame {
             return;
         }
 
+<<<<<<< HEAD
         String query = "SELECT * FROM Etudiant WHERE Matricule = ? OR EmailEtudiant = ?";
         try (PreparedStatement pst = con.prepareStatement(query)) {
+=======
+        try {
+            String query = "SELECT * FROM Etudiant WHERE Matricule = ? OR NomEtudiant = ?";
+            pst = con.prepareStatement(query);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst.setString(1, recherche);
             pst.setString(2, recherche);
             ResultSet rs = pst.executeQuery();

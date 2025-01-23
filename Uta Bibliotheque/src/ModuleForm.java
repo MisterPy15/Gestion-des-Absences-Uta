@@ -28,7 +28,7 @@ public class ModuleForm extends JFrame {
         setContentPane(StockPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

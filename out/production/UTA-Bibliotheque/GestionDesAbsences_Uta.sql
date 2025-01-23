@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
+<<<<<<< HEAD
 -- Généré le : jeu. 23 jan. 2025 à 01:10
+=======
+-- Généré le : mar. 21 jan. 2025 à 21:46
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -92,16 +96,26 @@ CREATE TABLE `Etudiant` (
   `Matricule` varchar(20) DEFAULT NULL,
   `AdresseEtudiant` text DEFAULT NULL,
   `EmailEtudiant` varchar(60) DEFAULT NULL,
+<<<<<<< HEAD
   `SpecialiteNiveau` varchar(255) NOT NULL
+=======
+  `IdFormation` int(11) DEFAULT NULL
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Etudiant`
 --
 
+<<<<<<< HEAD
 INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `SpecialiteNiveau`) VALUES
 (2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', ''),
 (3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', '');
+=======
+INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `IdFormation`) VALUES
+(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', NULL),
+(3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', NULL);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 
 -- --------------------------------------------------------
 
@@ -202,7 +216,11 @@ ALTER TABLE `Enseignant`
 --
 ALTER TABLE `Etudiant`
   ADD PRIMARY KEY (`Id`),
+<<<<<<< HEAD
   ADD KEY `idx_specialiteniveau` (`SpecialiteNiveau`);
+=======
+  ADD KEY `IdFormation` (`IdFormation`);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 
 --
 -- Index pour la table `Formation`
@@ -307,8 +325,13 @@ ALTER TABLE `Enseignant`
 --
 -- Contraintes pour la table `Module`
 --
+<<<<<<< HEAD
 ALTER TABLE `Module`
   ADD CONSTRAINT `fk_formation` FOREIGN KEY (`Formation`) REFERENCES `Etudiant` (`SpecialiteNiveau`);
+=======
+ALTER TABLE `Etudiant`
+  ADD CONSTRAINT `etudiant_ibfk_2` FOREIGN KEY (`IdFormation`) REFERENCES `Formation` (`Id`);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

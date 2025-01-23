@@ -21,7 +21,10 @@ public class AdminsForm extends JFrame {
     private JTextField tfMotdepasse;
     private JTextField tfNumTel;
     private JTextField tfAdresse;
+<<<<<<< HEAD
     private JScrollPane Administrateurs;
+=======
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
     private Connection con;
     private PreparedStatement pst;
 
@@ -69,8 +72,10 @@ public class AdminsForm extends JFrame {
         });
     }
 
+
     public void connect() {
         try {
+<<<<<<< HEAD
             // Charger le pilote PostgreSQL
             Class.forName("org.postgresql.Driver");
 
@@ -82,14 +87,33 @@ public class AdminsForm extends JFrame {
             ex.printStackTrace();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données !", "Erreur", JOptionPane.ERROR_MESSAGE);
+=======
+<<<<<<< HEAD
+            Class.forName("com.postgresql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
+            System.out.println("Connexion réussie");
+        } catch (ClassNotFoundException | SQLException ex) {
+=======
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
+            System.out.println("Succès");
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+>>>>>>> 62ee3580e66de9daf68d5045cd4be9f1180ffef8
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             ex.printStackTrace();
         }
     }
 
     private void table_load() {
         try {
+<<<<<<< HEAD
             String query = "SELECT a.Id, u.Nom, u.Prenom, u.Email, u.NumTel, u.Adresse FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id";
             pst = con.prepareStatement(query);
+=======
+            pst = con.prepareStatement("SELECT * FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id");
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
@@ -122,8 +146,12 @@ public class AdminsForm extends JFrame {
         }
 
         try {
+<<<<<<< HEAD
             // Insertion dans la table Utilisateur
             String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, email, role) VALUES (?, ?, ?, ?, ?, ?, 'Admin')";
+=======
+            String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, Email, Role) VALUES (?, ?, ?, ?, ?, ?, 'Admin')";
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst = con.prepareStatement(queryUtilisateur, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, nom);
             pst.setString(2, prenom);
@@ -133,11 +161,15 @@ public class AdminsForm extends JFrame {
             pst.setString(6, email);
             pst.executeUpdate();
 
+<<<<<<< HEAD
             // Récupération de l'ID de l'utilisateur inséré
+=======
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             ResultSet generatedKeys = pst.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int utilisateurId = generatedKeys.getInt(1);
 
+<<<<<<< HEAD
                 // Convertir le numéro de téléphone en long (bigint)
                 long numTelLong = Long.parseLong(numTel);
 
@@ -146,6 +178,12 @@ public class AdminsForm extends JFrame {
                 pst = con.prepareStatement(queryAdmin);
                 pst.setInt(1, utilisateurId);
                 pst.setLong(2, numTelLong); // Insérer le numéro en tant que bigint
+=======
+                String queryAdmin = "INSERT INTO Administrateur (IdUtilisateur, Téléphone) VALUES (?, ?)";
+                pst = con.prepareStatement(queryAdmin);
+                pst.setInt(1, utilisateurId);
+                pst.setString(2, numTel);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
                 pst.executeUpdate();
 
                 JOptionPane.showMessageDialog(this, "Admin Créé", "Succès", JOptionPane.INFORMATION_MESSAGE);
@@ -154,16 +192,25 @@ public class AdminsForm extends JFrame {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+<<<<<<< HEAD
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Le numéro de téléphone doit être un nombre valide", "Erreur", JOptionPane.ERROR_MESSAGE);
+=======
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
         }
     }
 
     private void modifyAdmin() {
+<<<<<<< HEAD
         String email = tfEmail.getText();
 
         if (email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Svp entrez l'email de l'administrateur à modifier", "Attention", JOptionPane.ERROR_MESSAGE);
+=======
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un admin dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             return;
         }
 
@@ -172,13 +219,21 @@ public class AdminsForm extends JFrame {
         String motDePasse = tfMotdepasse.getText();
         String numTel = tfNumTel.getText();
         String adresse = tfAdresse.getText();
+<<<<<<< HEAD
 
         if (nom.isEmpty() || prenom.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty() || adresse.isEmpty()) {
+=======
+        String email = tfEmail.getText();
+        int adminId = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
+
+        if (nom.isEmpty() || prenom.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty() || adresse.isEmpty() || email.isEmpty()) {
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             JOptionPane.showMessageDialog(this, "Svp remplissez tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
+<<<<<<< HEAD
             // Vérifier si l'administrateur existe avec cet email
             String queryUtilisateur = "SELECT u.Id FROM Utilisateur u WHERE u.email = ?";
             pst = con.prepareStatement(queryUtilisateur);
@@ -238,6 +293,26 @@ public class AdminsForm extends JFrame {
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Admin supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
+=======
+            String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? WHERE Id = (SELECT IdUtilisateur FROM Administrateur WHERE Id = ?)";
+            pst = con.prepareStatement(queryUtilisateur);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, motDePasse);
+            pst.setString(4, numTel);
+            pst.setString(5, adresse);
+            pst.setString(6, email);
+            pst.setInt(7, adminId);
+            pst.executeUpdate();
+
+            String queryAdmin = "UPDATE Administrateur SET Téléphone = ? WHERE Id = ?";
+            pst = con.prepareStatement(queryAdmin);
+            pst.setString(1, numTel);
+            pst.setInt(2, adminId);
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Admin modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             ViderChamps();
             table_load();
         } catch (SQLException ex) {
@@ -245,6 +320,37 @@ public class AdminsForm extends JFrame {
         }
     }
 
+<<<<<<< HEAD
+=======
+    private void deleteAdmin() {
+        int row = table1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Svp sélectionnez un admin dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int adminId = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
+
+        try {
+            String queryAdmin = "DELETE FROM Administrateur WHERE Id = ?";
+            pst = con.prepareStatement(queryAdmin);
+            pst.setInt(1, adminId);
+            pst.executeUpdate();
+
+            String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT IdUtilisateur FROM Administrateur WHERE Id = ?)";
+            pst = con.prepareStatement(queryUtilisateur);
+            pst.setInt(1, adminId);
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Admin supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            ViderChamps();
+            table_load();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
     private void searchAdmin() {
         String recherche = tfRecherche.getText();
 
@@ -254,7 +360,11 @@ public class AdminsForm extends JFrame {
         }
 
         try {
+<<<<<<< HEAD
             String query = "SELECT a.Id, u.Nom, u.Prenom, u.Email, u.NumTel, u.Adresse FROM Administrateur a JOIN Utilisateur u ON a.idutilisateur = u.Id WHERE u.email LIKE ?";
+=======
+            String query = "SELECT * FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             pst = con.prepareStatement(query);
             pst.setString(1, "%" + recherche + "%");
             ResultSet rs = pst.executeQuery();
@@ -262,10 +372,17 @@ public class AdminsForm extends JFrame {
             if (rs.next()) {
                 tfNom.setText(rs.getString("Nom"));
                 tfPrenom.setText(rs.getString("Prenom"));
+<<<<<<< HEAD
                 tfNumTel.setText(rs.getString("NumTel"));
                 tfAdresse.setText(rs.getString("Adresse"));
                 tfEmail.setText(rs.getString("Email"));
                 tfMotdepasse.setText(""); // Ne pas remplir le champ mot de passe
+=======
+                tfMotdepasse.setText(rs.getString("MotDePasse"));
+                tfNumTel.setText(rs.getString("NumTel"));
+                tfAdresse.setText(rs.getString("Adresse"));
+                tfEmail.setText(rs.getString("Email"));
+>>>>>>> 98974231dd4166c977521f8b0e3cef9c69f32179
             } else {
                 ViderChamps();
                 JOptionPane.showMessageDialog(this, "Aucun admin trouvé pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
