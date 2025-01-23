@@ -135,28 +135,28 @@
             <properties>
               <model>
                 <item value=""/>
-                <item value="IGL L1"/>
-                <item value="IGL L2"/>
-                <item value="IGL L3"/>
-                <item value="RIT L1"/>
-                <item value="RIT L2"/>
-                <item value="RIT L3"/>
-                <item value="FBA L1"/>
-                <item value="FBA L2"/>
-                <item value="FBA L3"/>
-                <item value="SEG L1"/>
-                <item value="SEG L2"/>
-                <item value="SEG L3"/>
-                <item value="DROIT L1"/>
-                <item value="DROIT L2"/>
-                <item value="DROIT L3"/>
+                <item value="IGL_L1"/>
+                <item value="IGL_L2"/>
+                <item value="IGL_L3"/>
+                <item value="RIT_L1"/>
+                <item value="RIT_L2"/>
+                <item value="RIT_L3"/>
+                <item value="FBA_L1"/>
+                <item value="FBA_L2"/>
+                <item value="FBA_L3"/>
+                <item value="SEG_L1"/>
+                <item value="SEG_L2"/>
+                <item value="SEG_L3"/>
+                <item value="DROIT_L1"/>
+                <item value="DROIT_L2"/>
+                <item value="DROIT_L3"/>
                 <item value=""/>
-                <item value="IDA B1"/>
-                <item value="IDA B2"/>
-                <item value="LOGISTIQUE B1"/>
-                <item value="LOGISTIQUE B2"/>
-                <item value="SEG B1"/>
-                <item value="SEG B2"/>
+                <item value="IDA_B1"/>
+                <item value="IDA_B2"/>
+                <item value="LOGISTIQUE_B1"/>
+                <item value="LOGISTIQUE_B2"/>
+                <item value="SEG_B1"/>
+                <item value="SEG_B2"/>
               </model>
             </properties>
           </component>
