@@ -186,7 +186,7 @@
         <properties>
           <font name="Fira Code" size="18" style="1"/>
           <labelFor value="b5cce"/>
-          <text value="Semaestre"/>
+          <text value="Semestre"/>
         </properties>
       </component>
       <component id="7f362" class="javax.swing.JComboBox" binding="cbSemestre">

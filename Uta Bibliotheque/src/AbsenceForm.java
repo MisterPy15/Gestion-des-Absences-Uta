@@ -5,23 +5,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AbsenceForm extends JFrame {
-    private JButton btnModifier;
     private JButton btnSupprimer;
     private JButton btnVider;
     private JPanel AbsencePanel;
     private JTable table1;
-    private JTextField tfDateAbsence;
-    private JTextField tfeure;
-    private JButton btnAjouter;
     private JButton btnRecherche;
     private JTextField tfRecherche;
     private JTextField tfMatricule;
+    private JTextField tfDateAbsence;
     private JTextField tfIdEnseignant;
     private JComboBox<String> cbSemestre;
+    private JComboBox<String> cbHeure;
+
     private Connection con;
     private PreparedStatement pst;
 
@@ -37,12 +34,6 @@ public class AbsenceForm extends JFrame {
         connect();
         table_load();
 
-        btnModifier.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modifyAbsence();
-            }
-        });
         btnSupprimer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,12 +46,6 @@ public class AbsenceForm extends JFrame {
                 ViderChamps();
             }
         });
-        btnAjouter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createAbsence();
-            }
-        });
         btnRecherche.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,11 +55,11 @@ public class AbsenceForm extends JFrame {
     }
 
     private void ViderChamps() {
-        tfDateAbsence.setText("");
-        tfeure.setText("");
         tfMatricule.setText("");
+        tfDateAbsence.setText("");
         tfIdEnseignant.setText("");
         cbSemestre.setSelectedIndex(-1);
+        cbHeure.setSelectedIndex(-1);
         tfRecherche.setText("");
         table_load();
     }
@@ -86,37 +71,6 @@ public class AbsenceForm extends JFrame {
             System.out.println("Succès");
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void createAbsence() {
-        String matricule = tfMatricule.getText();
-        String idEnseignant = tfIdEnseignant.getText();
-        String dateAbsence = tfDateAbsence.getText();
-        String heureAbsence = tfeure.getText();
-        String semestre = (String) cbSemestre.getSelectedItem();
-
-        if (matricule.isEmpty() || idEnseignant.isEmpty() || dateAbsence.isEmpty() || heureAbsence.isEmpty() || semestre == null) {
-            JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            String query = "INSERT INTO Absence (Matricule, IdEnseignant, DateAbsence, HeureAbsence, Semestre) VALUES (?, ?, ?, ?, ?)";
-            pst = con.prepareStatement(query);
-            pst.setString(1, matricule);
-            pst.setString(2, idEnseignant);
-            pst.setString(3, dateAbsence);
-            pst.setString(4, heureAbsence);
-            pst.setString(5, semestre);
-            pst.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Inscription Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-
-            ViderChamps();
-            table_load();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -129,42 +83,6 @@ public class AbsenceForm extends JFrame {
             table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void modifyAbsence() {
-        String idAbsence = tfRecherche.getText();
-        String matricule = tfMatricule.getText();
-        String idEnseignant = tfIdEnseignant.getText();
-        String dateAbsence = tfDateAbsence.getText();
-        String heureAbsence = tfeure.getText();
-        String semestre = (String) cbSemestre.getSelectedItem();
-
-        if (matricule.isEmpty() || idEnseignant.isEmpty() || dateAbsence.isEmpty() || heureAbsence.isEmpty() || semestre == null) {
-            JOptionPane.showMessageDialog(AbsenceForm.this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            String query = "UPDATE Absence SET Matricule=?, IdEnseignant=?, DateAbsence=?, HeureAbsence=?, Semestre=? WHERE Id=?";
-            pst = con.prepareStatement(query);
-            pst.setString(1, matricule);
-            pst.setString(2, idEnseignant);
-            pst.setString(3, dateAbsence);
-            pst.setString(4, heureAbsence);
-            pst.setString(5, semestre);
-            pst.setString(6, idAbsence);
-
-            int rowsUpdated = pst.executeUpdate();
-            if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(AbsenceForm.this, "Modification Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                table_load();
-                ViderChamps();
-            } else {
-                JOptionPane.showMessageDialog(AbsenceForm.this, "Aucune absence trouvée avec cet identifiant", "Attention", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -195,33 +113,34 @@ public class AbsenceForm extends JFrame {
     }
 
     private void searchAbsence() {
-        try {
-            String idAbsence = tfRecherche.getText();
-            pst = con.prepareStatement("SELECT Matricule, IdEnseignant, DateAbsence, HeureAbsence, Semestre FROM Absence WHERE Id=?");
-            pst.setString(1, idAbsence);
+        String matricule = tfRecherche.getText();
 
+        if (matricule.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez entrer un matricule pour la recherche", "Attention", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            String query = "SELECT * FROM Absence WHERE Matricule = ?";
+            pst = con.prepareStatement(query);
+            pst.setString(1, matricule);
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                String matricule = rs.getString(1);
-                String idEnseignant = rs.getString(2);
-                String dateAbsence = rs.getString(3);
-                String heureAbsence = rs.getString(4);
-                String semestre = rs.getString(5);
-
-                tfMatricule.setText(matricule);
-                tfIdEnseignant.setText(idEnseignant);
-                tfDateAbsence.setText(dateAbsence);
-                tfeure.setText(heureAbsence);
-                cbSemestre.setSelectedItem(semestre);
+                tfMatricule.setText(rs.getString("Matricule"));
+                tfDateAbsence.setText(rs.getString("DateAbsence"));
+                tfIdEnseignant.setText(rs.getString("IdEnseignant"));
+                cbSemestre.setSelectedItem(rs.getString("Semestre"));
+                cbHeure.setSelectedItem(rs.getString("HeureAbsence"));
             } else {
                 ViderChamps();
-                JOptionPane.showMessageDialog(null, "Aucune absence trouvée pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Aucune absence trouvée pour le matricule spécifié", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
-            table_load();
+
+            table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erreur lors de la recherche des absences", "Erreur", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erreur lors de la recherche des absences", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 

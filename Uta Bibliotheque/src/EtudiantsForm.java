@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class EtudiantsForm extends JFrame {
@@ -18,52 +16,42 @@ public class EtudiantsForm extends JFrame {
     private JButton rechercherButton;
     private JTextField tfRecherche;
     private JPanel AdherentPanel;
-    private JComboBox<String> cbSpecialitéNiveau;
+    private JComboBox cbSpecialitéNiveau;
+    private JButton btnVider;
 
     private Connection con;
-    private PreparedStatement pst;
 
     public EtudiantsForm() {
         setTitle("Gestion Des Etudiants");
         setContentPane(AdherentPanel);
         setMinimumSize(new Dimension(964, 741));
         setSize(964, 741);
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         connect();
         loadEtudiants();
-        loadSpecialiteNiveau();
 
-        btnCreer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createEtudiant();
-                loadEtudiants();
-            }
+        btnCreer.addActionListener(e -> {
+            createEtudiant();
+            loadEtudiants();
         });
-        btnModifier.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateEtudiant();
-                loadEtudiants();
-            }
+
+        btnModifier.addActionListener(e -> {
+            updateEtudiant();
+            loadEtudiants();
         });
-        btnSupprimer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteEtudiant();
-                loadEtudiants();
-            }
+
+        btnSupprimer.addActionListener(e -> {
+            deleteEtudiant();
+            loadEtudiants();
         });
-        rechercherButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchEtudiant();
-            }
-        });
+
+        rechercherButton.addActionListener(e -> searchEtudiant());
+
+        btnVider.addActionListener(e -> resetFields());
     }
 
     public void connect() {
@@ -77,39 +65,26 @@ public class EtudiantsForm extends JFrame {
             ex.printStackTrace();
         }
     }
-
     private void loadEtudiants() {
-        try {
-            String query = "SELECT * FROM Etudiant";
-            pst = con.prepareStatement(query);
-            ResultSet rs = pst.executeQuery();
+        String query = "SELECT * FROM Etudiant";
+        try (PreparedStatement pst = con.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
 
-            DefaultTableModel model = new DefaultTableModel(new String[]{"Matricule", "NomEtudiant", "PrenomEtudiant", "EmailEtudiant", "AdresseEtudiant"}, 0);
+            DefaultTableModel model = new DefaultTableModel(
+                    new String[]{"Matricule", "NomEtudiant", "PrenomEtudiant", "EmailEtudiant", "AdresseEtudiant", "SpecialiteNiveau"}, 0);
+
             while (rs.next()) {
                 String matricule = rs.getString("Matricule");
                 String nom = rs.getString("NomEtudiant");
                 String prenom = rs.getString("PrenomEtudiant");
                 String email = rs.getString("EmailEtudiant");
                 String adresse = rs.getString("AdresseEtudiant");
-                model.addRow(new Object[]{matricule, nom, prenom, email, adresse});
+                String specialiteNiveau = rs.getString("SpecialiteNiveau");
+                model.addRow(new Object[]{matricule, nom, prenom, email, adresse, specialiteNiveau});
             }
+
             table1.setModel(model);
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void loadSpecialiteNiveau() {
-        try {
-            String query = "SELECT DISTINCT SpecialiteNiveau FROM Etudiant";
-            pst = con.prepareStatement(query);
-            ResultSet rs = pst.executeQuery();
-
-            cbSpecialitéNiveau.removeAllItems();
-            while (rs.next()) {
-                cbSpecialitéNiveau.addItem(rs.getString("SpecialiteNiveau"));
-            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -131,16 +106,15 @@ public class EtudiantsForm extends JFrame {
         String email = tfEmail.getText();
         String adresse = tfAdresse.getText();
         String matricule = tfMatricule.getText();
-        String specialiteNiveau = (String) cbSpecialitéNiveau.getSelectedItem();
+        String specialiteNiveau = cbSpecialitéNiveau.getSelectedItem() != null ? cbSpecialitéNiveau.getSelectedItem().toString() : "";
 
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || matricule.isEmpty() || specialiteNiveau == null) {
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || matricule.isEmpty() || specialiteNiveau.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule, SpecialiteNiveau) VALUES (?, ?, ?, ?, ?, ?)";
-            pst = con.prepareStatement(query);
+        String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule, SpecialiteNiveau) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pst = con.prepareStatement(query)) {
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
@@ -150,8 +124,7 @@ public class EtudiantsForm extends JFrame {
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Inscription Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            resetFields();  //pour vider les champs après l'inscription
-
+            resetFields();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -163,16 +136,15 @@ public class EtudiantsForm extends JFrame {
         String email = tfEmail.getText();
         String adresse = tfAdresse.getText();
         String matricule = tfMatricule.getText();
-        String specialiteNiveau = (String) cbSpecialitéNiveau.getSelectedItem();
+        String specialiteNiveau = cbSpecialitéNiveau.getSelectedItem() != null ? cbSpecialitéNiveau.getSelectedItem().toString() : "";
 
-        if (matricule.isEmpty() || nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || specialiteNiveau == null) {
+        if (matricule.isEmpty() || nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || specialiteNiveau.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ?, SpecialiteNiveau = ? WHERE Matricule = ?";
-            pst = con.prepareStatement(query);
+        String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ?, SpecialiteNiveau = ? WHERE Matricule = ?";
+        try (PreparedStatement pst = con.prepareStatement(query)) {
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
@@ -196,9 +168,8 @@ public class EtudiantsForm extends JFrame {
             return;
         }
 
-        try {
-            String query = "DELETE FROM Etudiant WHERE Matricule = ?";
-            pst = con.prepareStatement(query);
+        String query = "DELETE FROM Etudiant WHERE Matricule = ?";
+        try (PreparedStatement pst = con.prepareStatement(query)) {
             pst.setString(1, matricule);
             pst.executeUpdate();
 
@@ -213,13 +184,12 @@ public class EtudiantsForm extends JFrame {
         String recherche = tfRecherche.getText();
 
         if (recherche.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Svp Entrez un Matricule ou Nom", "Attention", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Svp Entrez un Matricule ou Email", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            String query = "SELECT * FROM Etudiant WHERE Matricule = ? OR NomEtudiant = ?";
-            pst = con.prepareStatement(query);
+        String query = "SELECT * FROM Etudiant WHERE Matricule = ? OR EmailEtudiant = ?";
+        try (PreparedStatement pst = con.prepareStatement(query)) {
             pst.setString(1, recherche);
             pst.setString(2, recherche);
             ResultSet rs = pst.executeQuery();
@@ -234,22 +204,21 @@ public class EtudiantsForm extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Etudiant non trouvé", "Attention", JOptionPane.ERROR_MESSAGE);
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new EtudiantsForm();
-            }
-        });
+        SwingUtilities.invokeLater(EtudiantsForm::new);
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
+        // Initialisation de cbSpecialitéNiveau
+        cbSpecialitéNiveau = new JComboBox(new String[]{"Informatique L1", "Informatique L2", "Mathématiques L1", "Mathématiques L2"});
+        cbSpecialitéNiveau.setSelectedIndex(-1);
+
+        // Initialisation du bouton btnVider
+        btnVider = new JButton("Vider");
     }
 }
