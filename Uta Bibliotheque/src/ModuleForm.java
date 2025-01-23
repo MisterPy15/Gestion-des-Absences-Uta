@@ -20,7 +20,7 @@ public class ModuleForm extends JFrame {
     private JButton btnSupprimer;
     private JButton btnViderChamps;
     private JPanel StockPanel;
-    private JTextField tfFormation;
+    private JComboBox cbSpecialiteNiveau;
     private Connection con;
     private PreparedStatement pst;
 
