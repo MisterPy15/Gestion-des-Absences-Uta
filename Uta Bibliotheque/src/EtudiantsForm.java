@@ -18,7 +18,7 @@ public class EtudiantsForm extends JFrame {
     private JButton rechercherButton;
     private JTextField tfRecherche;
     private JPanel AdherentPanel;
-    private JComboBox cbSpecialitéNiveau;
+    private JComboBox<String> cbSpecialitéNiveau;
 
     private Connection con;
     private PreparedStatement pst;
@@ -35,6 +35,7 @@ public class EtudiantsForm extends JFrame {
 
         connect();
         loadEtudiants();
+        loadSpecialiteNiveau();
 
         btnCreer.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +78,6 @@ public class EtudiantsForm extends JFrame {
         }
     }
 
-
     private void loadEtudiants() {
         try {
             String query = "SELECT * FROM Etudiant";
@@ -100,6 +100,21 @@ public class EtudiantsForm extends JFrame {
         }
     }
 
+    private void loadSpecialiteNiveau() {
+        try {
+            String query = "SELECT DISTINCT SpecialiteNiveau FROM Etudiant";
+            pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+
+            cbSpecialitéNiveau.removeAllItems();
+            while (rs.next()) {
+                cbSpecialitéNiveau.addItem(rs.getString("SpecialiteNiveau"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void resetFields() {
         tfNom.setText("");
         tfPrenom.setText("");
@@ -107,6 +122,7 @@ public class EtudiantsForm extends JFrame {
         tfAdresse.setText("");
         tfMatricule.setText("");
         tfRecherche.setText("");
+        cbSpecialitéNiveau.setSelectedIndex(-1);
     }
 
     private void createEtudiant() {
@@ -115,20 +131,22 @@ public class EtudiantsForm extends JFrame {
         String email = tfEmail.getText();
         String adresse = tfAdresse.getText();
         String matricule = tfMatricule.getText();
+        String specialiteNiveau = (String) cbSpecialitéNiveau.getSelectedItem();
 
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || matricule.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || matricule.isEmpty() || specialiteNiveau == null) {
             JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Etudiant (NomEtudiant, PrenomEtudiant, EmailEtudiant, AdresseEtudiant, Matricule, SpecialiteNiveau) VALUES (?, ?, ?, ?, ?, ?)";
             pst = con.prepareStatement(query);
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
             pst.setString(4, adresse);
             pst.setString(5, matricule);
+            pst.setString(6, specialiteNiveau);
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Inscription Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
@@ -145,20 +163,22 @@ public class EtudiantsForm extends JFrame {
         String email = tfEmail.getText();
         String adresse = tfAdresse.getText();
         String matricule = tfMatricule.getText();
+        String specialiteNiveau = (String) cbSpecialitéNiveau.getSelectedItem();
 
-        if (matricule.isEmpty() || nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty()) {
+        if (matricule.isEmpty() || nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || adresse.isEmpty() || specialiteNiveau == null) {
             JOptionPane.showMessageDialog(this, "Svp Remplissez Tous les Champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ? WHERE Matricule = ?";
+            String query = "UPDATE Etudiant SET NomEtudiant = ?, PrenomEtudiant = ?, EmailEtudiant = ?, AdresseEtudiant = ?, SpecialiteNiveau = ? WHERE Matricule = ?";
             pst = con.prepareStatement(query);
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, email);
             pst.setString(4, adresse);
-            pst.setString(5, matricule);
+            pst.setString(5, specialiteNiveau);
+            pst.setString(6, matricule);
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Modification Réussie", "Succès", JOptionPane.INFORMATION_MESSAGE);
@@ -210,6 +230,7 @@ public class EtudiantsForm extends JFrame {
                 tfEmail.setText(rs.getString("EmailEtudiant"));
                 tfAdresse.setText(rs.getString("AdresseEtudiant"));
                 tfMatricule.setText(rs.getString("Matricule"));
+                cbSpecialitéNiveau.setSelectedItem(rs.getString("SpecialiteNiveau"));
             } else {
                 JOptionPane.showMessageDialog(this, "Etudiant non trouvé", "Attention", JOptionPane.ERROR_MESSAGE);
             }

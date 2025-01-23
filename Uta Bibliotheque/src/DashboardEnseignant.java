@@ -1,8 +1,15 @@
 import javax.swing.*;
 
 public class DashboardEnseignant {
-    private JComboBox semaestreComboBox;
-    private JComboBox comboBox1;
-    private JTextField textField1;
-    private JButton ajouterAbsenceButton;
+    private JComboBox cbModule;
+    private JComboBox cbSpecialiteNiveau;
+    private JTextField tfMatriculeEtudiant;
+    private JButton btnAjouterAbsence;
+    private JLabel lblEnseignant;
+    private JLabel LblidEnseignant;
+    private JTextField tfIdEnseignant;
+    private JPanel PanelDate;
+    private JComboBox cbHheure;
+    private JComboBox cbSemestre;
+    private JLabel lblHeure;
 }
