@@ -139,8 +139,8 @@ public class DashoardForm extends JFrame {
     private boolean connectToDatabase() {
         boolean hasRegisterUser = false;
 
-        final String MYSQL_SERVER_URL = "jdbc:mysql://localhost/";
-        final String DB_URL = "jdbc:mysql://localhost/GestionDesAbsences_Uta?serverTimeZone=UTC";
+        final String MYSQL_SERVER_URL = "jdbc:postgresql://localhost/";
+        final String DB_URL = "jdbc:postgresql://localhost/GestionDesAbsences_Uta?serverTimeZone=UTC";
         final String USERNAME = "root";
         final String PASSWORD = "";
 

@@ -1,4 +1,4 @@
-import net.proteanit.sql.DbUtils;
+// import net.proteanit.sql.DbUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class EnseignantsForm extends JFrame {
     private JPanel EnseignantPanel;
     private JTextField tfNom;
     private JTextField tfRecherche;
-    private JButton btnRcherche;
+    private JButton btnRecherche;
     private JButton btnCreer;
     private JButton btnModifier;
     private JButton btnSupprimer;
@@ -41,73 +41,51 @@ public class EnseignantsForm extends JFrame {
         connect();
         table_load();
 
-        btnViderChamps.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViderChamps();
-            }
-        });
+        btnViderChamps.addActionListener(e -> ViderChamps());
 
-        btnSupprimer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteEnseignant();
-            }
-        });
+        btnSupprimer.addActionListener(e -> deleteEnseignant());
 
-        btnModifier.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateEnseignant();
-            }
-        });
+        btnModifier.addActionListener(e -> updateEnseignant());
 
-        btnCreer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createEnseignant();
-            }
-        });
+        btnCreer.addActionListener(e -> createEnseignant());
 
-        btnRcherche.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchEnseignant();
-            }
-        });
+        btnRecherche.addActionListener(e -> searchEnseignant());
 
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 int row = table1.getSelectedRow();
-                tfNom.setText(table1.getModel().getValueAt(row, 1).toString());
-                tfPrenom.setText(table1.getModel().getValueAt(row, 2).toString());
-                pfMotdePasse.setText(table1.getModel().getValueAt(row, 3).toString());
-                tfNumTel.setText(table1.getModel().getValueAt(row, 4).toString());
-                tfAdresse.setText(table1.getModel().getValueAt(row, 5).toString());
-                tfIdEmail.setText(table1.getModel().getValueAt(row, 6).toString());
+                tfNom.setText(table1.getModel().getValueAt(row, 1) != null ? table1.getModel().getValueAt(row, 1).toString() : "");
+                tfPrenom.setText(table1.getModel().getValueAt(row, 2) != null ? table1.getModel().getValueAt(row, 2).toString() : "");
+                tfNumTel.setText(table1.getModel().getValueAt(row, 3) != null ? table1.getModel().getValueAt(row, 3).toString() : "");
+                tfAdresse.setText(table1.getModel().getValueAt(row, 4) != null ? table1.getModel().getValueAt(row, 4).toString() : "");
+                tfIdEmail.setText(table1.getModel().getValueAt(row, 5) != null ? table1.getModel().getValueAt(row, 5).toString() : "");
             }
         });
     }
 
-
     public void connect() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
-            System.out.println("Succès");
+            // Charger le pilote PostgreSQL
+            Class.forName("org.postgresql.Driver");
+
+            // Connexion à la base de données
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
+            System.out.println("Connexion réussie !");
         } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Pilote JDBC non trouvé !", "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données !", "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
 
-
-
     private void table_load() {
         try {
-            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse, u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id";
+            // Ne pas inclure 'MotDePasse' dans la requête
+            String query = "SELECT e.Id, u.Nom, u.Prenom, u.NumTel, u.Adresse, u.Email " +
+                    "FROM Enseignant e JOIN Utilisateur u ON e.idutilisateur = u.Id";
             pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -128,14 +106,31 @@ public class EnseignantsForm extends JFrame {
 
     private void searchEnseignant() {
         try {
-            String recherche = tfRecherche.getText();
-            String query = "SELECT e.Id, u.Nom, u.Prenom, u.MotDePasse, u.NumTel, u.Adresse," +
-                            " u.Email FROM Enseignant e JOIN Utilisateur u ON e.IdUtilsateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
+            String rechercheEmail = tfRecherche.getText();
+            if (rechercheEmail.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Veuillez entrer un email pour la recherche", "Attention", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Recherche par email
+            String query = "SELECT e.Id, u.Nom, u.Prenom, u.NumTel, u.Adresse, u.Email " +
+                    "FROM Enseignant e JOIN Utilisateur u ON e.idutilisateur = u.Id " +
+                    "WHERE u.Email = ?";
             pst = con.prepareStatement(query);
-            pst.setString(1, "%" + recherche + "%");
-            pst.setString(2, "%" + recherche + "%");
+            pst.setString(1, rechercheEmail);
             ResultSet rs = pst.executeQuery();
-            table1.setModel(DbUtils.resultSetToTableModel(rs));
+
+            if (rs.next()) {
+                // Remplir les champs avec les données récupérées
+                tfNom.setText(rs.getString("Nom"));
+                tfPrenom.setText(rs.getString("Prenom"));
+                tfNumTel.setText(rs.getString("NumTel"));
+                tfAdresse.setText(rs.getString("Adresse"));
+                tfIdEmail.setText(rs.getString("Email"));
+            } else {
+                JOptionPane.showMessageDialog(this, "Aucun enseignant trouvé avec cet email", "Résultat de la recherche", JOptionPane.INFORMATION_MESSAGE);
+                ViderChamps();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -187,9 +182,9 @@ public class EnseignantsForm extends JFrame {
             if (generatedKeys.next()) {
                 int utilisateurId = generatedKeys.getInt(1);
 
-                String queryEnseignant = "INSERT INTO Enseignant (Num_Tel, IdUtilsateur) VALUES (?, ?)";
+                String queryEnseignant = "INSERT INTO Enseignant (Num_Tel, idutilisateur) VALUES (?, ?)";
                 pst = con.prepareStatement(queryEnseignant);
-                pst.setString(1, numTel);
+                pst.setString(1, numTel);  // Numéro de téléphone en tant que chaîne
                 pst.setInt(2, utilisateurId);
                 pst.executeUpdate();
 
@@ -225,18 +220,19 @@ public class EnseignantsForm extends JFrame {
         String hashedPassword = hashPassword(motDePasse);
 
         try {
-            String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? WHERE Id = (SELECT IdUtilsateur FROM Enseignant WHERE Id = ?)";
+            String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? " +
+                    "WHERE Id = (SELECT idutilisateur FROM Enseignant WHERE Id = ?)";
             pst = con.prepareStatement(queryUtilisateur);
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, hashedPassword);
-            pst.setString(4, numTel);
+            pst.setString(4, numTel);  // Numéro de téléphone en tant que chaîne
             pst.setString(5, adresse);
             pst.setString(6, email);
             pst.setInt(7, idEnseignant);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Enseignant modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Enseignant Modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
             table_load();
             ViderChamps();
         } catch (SQLException ex) {
@@ -254,19 +250,12 @@ public class EnseignantsForm extends JFrame {
         int idEnseignant = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
 
         try {
-            String queryEnseignant = "DELETE FROM Enseignant WHERE Id = ?";
-            pst = con.prepareStatement(queryEnseignant);
+            String query = "DELETE FROM Enseignant WHERE Id = ?";
+            pst = con.prepareStatement(query);
             pst.setInt(1, idEnseignant);
             pst.executeUpdate();
 
-            String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT IdUtilsateur FROM Enseignant WHERE Id = ?)";
-            //String queryUtilisateurEns = "DELETE FROM Utilisateur WHERE Id = ?";
-
-            pst = con.prepareStatement(queryUtilisateur);
-            pst.setInt(1, idEnseignant);
-            pst.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Enseignant supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Enseignant Supprimé", "Succès", JOptionPane.INFORMATION_MESSAGE);
             table_load();
             ViderChamps();
         } catch (SQLException ex) {

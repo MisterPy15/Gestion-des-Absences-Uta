@@ -110,15 +110,21 @@ public class AbsenceForm extends JFrame {
 
     public void connect() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
-            System.out.println("Succès");
+            // Charger le pilote PostgreSQL
+            Class.forName("org.postgresql.Driver");
+
+            // Connexion à la base de données
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
+            System.out.println("Connexion réussie !");
         } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Pilote JDBC non trouvé !", "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
+
 
     private void createLivre() {
         String titre = tfDateAbsence.getText();

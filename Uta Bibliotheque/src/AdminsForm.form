@@ -243,14 +243,14 @@
           <color color="-15454195"/>
         </border>
         <children>
-          <scrollpane id="c4046">
+          <scrollpane id="c4046" binding="Administrateurs">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Fira Code" size="18" style="2"/>
             </properties>
-            <border type="line" title="Emprunts" title-justification="2" title-position="2">
+            <border type="line" title="Administrateurs" title-justification="2" title-position="2">
               <font name="Zapfino" size="22" style="1"/>
               <color color="-16742445"/>
             </border>

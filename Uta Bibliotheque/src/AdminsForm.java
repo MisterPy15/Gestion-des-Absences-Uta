@@ -21,6 +21,7 @@ public class AdminsForm extends JFrame {
     private JTextField tfMotdepasse;
     private JTextField tfNumTel;
     private JTextField tfAdresse;
+    private JScrollPane Administrateurs;
     private Connection con;
     private PreparedStatement pst;
 
@@ -68,23 +69,27 @@ public class AdminsForm extends JFrame {
         });
     }
 
-
     public void connect() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/GestionDesAbsences_Uta?useSSL=false&serverTimezone=UTC", "root", "");
-            System.out.println("Succès");
+            // Charger le pilote PostgreSQL
+            Class.forName("org.postgresql.Driver");
+
+            // Connexion à la base de données
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/GestionDesAbsences_Uta", "postgres", "29122003");
+            System.out.println("Connexion réussie !");
         } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Pilote JDBC non trouvé !", "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données !", "Erreur", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
 
-
     private void table_load() {
         try {
-            pst = con.prepareStatement("SELECT * FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id");
+            String query = "SELECT a.Id, u.Nom, u.Prenom, u.Email, u.NumTel, u.Adresse FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id";
+            pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             table1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
@@ -117,7 +122,8 @@ public class AdminsForm extends JFrame {
         }
 
         try {
-            String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, Email, Role) VALUES (?, ?, ?, ?, ?, ?, 'Admin')";
+            // Insertion dans la table Utilisateur
+            String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, email, role) VALUES (?, ?, ?, ?, ?, ?, 'Admin')";
             pst = con.prepareStatement(queryUtilisateur, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, nom);
             pst.setString(2, prenom);
@@ -127,14 +133,19 @@ public class AdminsForm extends JFrame {
             pst.setString(6, email);
             pst.executeUpdate();
 
+            // Récupération de l'ID de l'utilisateur inséré
             ResultSet generatedKeys = pst.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int utilisateurId = generatedKeys.getInt(1);
 
-                String queryAdmin = "INSERT INTO Administrateur (IdUtilisateur, Téléphone) VALUES (?, ?)";
+                // Convertir le numéro de téléphone en long (bigint)
+                long numTelLong = Long.parseLong(numTel);
+
+                // Insertion dans la table Administrateur
+                String queryAdmin = "INSERT INTO Administrateur (idutilisateur, telephone) VALUES (?, ?)";
                 pst = con.prepareStatement(queryAdmin);
                 pst.setInt(1, utilisateurId);
-                pst.setString(2, numTel);
+                pst.setLong(2, numTelLong); // Insérer le numéro en tant que bigint
                 pst.executeUpdate();
 
                 JOptionPane.showMessageDialog(this, "Admin Créé", "Succès", JOptionPane.INFORMATION_MESSAGE);
@@ -143,13 +154,16 @@ public class AdminsForm extends JFrame {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Le numéro de téléphone doit être un nombre valide", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void modifyAdmin() {
-        int row = table1.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Svp sélectionnez un admin dans la table", "Attention", JOptionPane.ERROR_MESSAGE);
+        String email = tfEmail.getText();
+
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Svp entrez l'email de l'administrateur à modifier", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -158,35 +172,46 @@ public class AdminsForm extends JFrame {
         String motDePasse = tfMotdepasse.getText();
         String numTel = tfNumTel.getText();
         String adresse = tfAdresse.getText();
-        String email = tfEmail.getText();
-        int adminId = Integer.parseInt(table1.getModel().getValueAt(row, 0).toString());
 
-        if (nom.isEmpty() || prenom.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty() || adresse.isEmpty() || email.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty() || motDePasse.isEmpty() || numTel.isEmpty() || adresse.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Svp remplissez tous les champs", "Attention", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? WHERE Id = (SELECT IdUtilisateur FROM Administrateur WHERE Id = ?)";
+            // Vérifier si l'administrateur existe avec cet email
+            String queryUtilisateur = "SELECT u.Id FROM Utilisateur u WHERE u.email = ?";
             pst = con.prepareStatement(queryUtilisateur);
-            pst.setString(1, nom);
-            pst.setString(2, prenom);
-            pst.setString(3, motDePasse);
-            pst.setString(4, numTel);
-            pst.setString(5, adresse);
-            pst.setString(6, email);
-            pst.setInt(7, adminId);
-            pst.executeUpdate();
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
 
-            String queryAdmin = "UPDATE Administrateur SET Téléphone = ? WHERE Id = ?";
-            pst = con.prepareStatement(queryAdmin);
-            pst.setString(1, numTel);
-            pst.setInt(2, adminId);
-            pst.executeUpdate();
+            if (rs.next()) {
+                int utilisateurId = rs.getInt("Id");
 
-            JOptionPane.showMessageDialog(this, "Admin modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            ViderChamps();
-            table_load();
+                // Mise à jour de l'utilisateur
+                String updateUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ? WHERE Id = ?";
+                pst = con.prepareStatement(updateUtilisateur);
+                pst.setString(1, nom);
+                pst.setString(2, prenom);
+                pst.setString(3, motDePasse);
+                pst.setString(4, numTel);
+                pst.setString(5, adresse);
+                pst.setInt(6, utilisateurId);
+                pst.executeUpdate();
+
+                // Mise à jour de l'administrateur
+                String updateAdmin = "UPDATE Administrateur SET telephone = ? WHERE idutilisateur = ?";
+                pst = con.prepareStatement(updateAdmin);
+                pst.setString(1, numTel);
+                pst.setInt(2, utilisateurId);
+                pst.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Admin modifié", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                ViderChamps();
+                table_load();
+            } else {
+                JOptionPane.showMessageDialog(this, "Aucun administrateur trouvé avec cet email", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -207,7 +232,7 @@ public class AdminsForm extends JFrame {
             pst.setInt(1, adminId);
             pst.executeUpdate();
 
-            String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT IdUtilisateur FROM Administrateur WHERE Id = ?)";
+            String queryUtilisateur = "DELETE FROM Utilisateur WHERE Id = (SELECT idutilisateur FROM Administrateur WHERE Id = ?)";
             pst = con.prepareStatement(queryUtilisateur);
             pst.setInt(1, adminId);
             pst.executeUpdate();
@@ -229,19 +254,18 @@ public class AdminsForm extends JFrame {
         }
 
         try {
-            String query = "SELECT * FROM Administrateur a JOIN Utilisateur u ON a.IdUtilisateur = u.Id WHERE u.Nom LIKE ? OR u.Prenom LIKE ?";
+            String query = "SELECT a.Id, u.Nom, u.Prenom, u.Email, u.NumTel, u.Adresse FROM Administrateur a JOIN Utilisateur u ON a.idutilisateur = u.Id WHERE u.email LIKE ?";
             pst = con.prepareStatement(query);
             pst.setString(1, "%" + recherche + "%");
-            pst.setString(2, "%" + recherche + "%");
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
                 tfNom.setText(rs.getString("Nom"));
                 tfPrenom.setText(rs.getString("Prenom"));
-                tfMotdepasse.setText(rs.getString("MotDePasse"));
                 tfNumTel.setText(rs.getString("NumTel"));
                 tfAdresse.setText(rs.getString("Adresse"));
                 tfEmail.setText(rs.getString("Email"));
+                tfMotdepasse.setText(""); // Ne pas remplir le champ mot de passe
             } else {
                 ViderChamps();
                 JOptionPane.showMessageDialog(this, "Aucun admin trouvé pour la recherche spécifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
