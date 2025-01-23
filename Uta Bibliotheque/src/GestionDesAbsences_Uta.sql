@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 21 jan. 2025 à 21:46
+-- Généré le : jeu. 23 jan. 2025 à 01:10
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.0.28
 
@@ -29,10 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `Absence` (
   `Id` int(11) NOT NULL,
+  `Matricule` varchar(20) DEFAULT NULL,
+  `IdEnseignant` int(11) DEFAULT NULL,
   `DateAbsence` date DEFAULT NULL,
-  `Heure` varchar(10) DEFAULT NULL,
-  `IdEtudiant` int(11) DEFAULT NULL,
-  `IdEnseignant` int(11) DEFAULT NULL
+  `HeureAbsence` varchar(10) DEFAULT NULL,
+  `Semestre` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -91,16 +92,16 @@ CREATE TABLE `Etudiant` (
   `Matricule` varchar(20) DEFAULT NULL,
   `AdresseEtudiant` text DEFAULT NULL,
   `EmailEtudiant` varchar(60) DEFAULT NULL,
-  `IdFormation` int(11) DEFAULT NULL
+  `SpecialiteNiveau` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Etudiant`
 --
 
-INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `IdFormation`) VALUES
-(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', NULL),
-(3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', NULL);
+INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `SpecialiteNiveau`) VALUES
+(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', ''),
+(3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', '');
 
 -- --------------------------------------------------------
 
@@ -123,8 +124,16 @@ CREATE TABLE `Formation` (
 CREATE TABLE `Module` (
   `Id` int(11) NOT NULL,
   `NomModule` varchar(60) DEFAULT NULL,
-  `Coefficient_Module` int(11) DEFAULT NULL
+  `Coefficient_Module` int(11) DEFAULT NULL,
+  `Formation` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `Module`
+--
+
+INSERT INTO `Module` (`Id`, `NomModule`, `Coefficient_Module`, `Formation`) VALUES
+(1, 'Math Info', 6, '');
 
 -- --------------------------------------------------------
 
@@ -164,7 +173,6 @@ INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `NumTel`, `Adres
 --
 ALTER TABLE `Absence`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `IdEtudiant` (`IdEtudiant`),
   ADD KEY `IdEnseignant` (`IdEnseignant`);
 
 --
@@ -194,7 +202,7 @@ ALTER TABLE `Enseignant`
 --
 ALTER TABLE `Etudiant`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `IdFormation` (`IdFormation`);
+  ADD KEY `idx_specialiteniveau` (`SpecialiteNiveau`);
 
 --
 -- Index pour la table `Formation`
@@ -206,7 +214,8 @@ ALTER TABLE `Formation`
 -- Index pour la table `Module`
 --
 ALTER TABLE `Module`
-  ADD PRIMARY KEY (`Id`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `fk_formation` (`Formation`);
 
 --
 -- Index pour la table `Utilisateur`
@@ -258,7 +267,7 @@ ALTER TABLE `Formation`
 -- AUTO_INCREMENT pour la table `Module`
 --
 ALTER TABLE `Module`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `Utilisateur`
@@ -274,7 +283,6 @@ ALTER TABLE `Utilisateur`
 -- Contraintes pour la table `Absence`
 --
 ALTER TABLE `Absence`
-  ADD CONSTRAINT `absence_ibfk_1` FOREIGN KEY (`IdEtudiant`) REFERENCES `Etudiant` (`Id`),
   ADD CONSTRAINT `absence_ibfk_2` FOREIGN KEY (`IdEnseignant`) REFERENCES `Enseignant` (`Id`);
 
 --
@@ -297,10 +305,10 @@ ALTER TABLE `Enseignant`
   ADD CONSTRAINT `enseignant_ibfk_1` FOREIGN KEY (`IdUtilsateur`) REFERENCES `Utilisateur` (`Id`);
 
 --
--- Contraintes pour la table `Etudiant`
+-- Contraintes pour la table `Module`
 --
-ALTER TABLE `Etudiant`
-  ADD CONSTRAINT `etudiant_ibfk_2` FOREIGN KEY (`IdFormation`) REFERENCES `Formation` (`Id`);
+ALTER TABLE `Module`
+  ADD CONSTRAINT `fk_formation` FOREIGN KEY (`Formation`) REFERENCES `Etudiant` (`SpecialiteNiveau`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

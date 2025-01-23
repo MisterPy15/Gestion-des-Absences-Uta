@@ -18,14 +18,17 @@ public class AbsenceForm extends JFrame {
     private JPanel DateParutionPanel;
     private JPanel LivrePanel;
     private JTable table1;
-    private JTextField tfTitre;
-    private JTextField tfAuteur;
+    private JTextField tfDateAbsence;
+    private JTextField tfeure;
     private JTextField tfCode;
     private JButton btnAjouter;
     private JButton btnRecherche;
     private JLabel lbPhoto;
-    private JTextField tfNbrPage;
+    private JTextField tfSemestre;
     private JTextField tfRecherche;
+    private JTextField tfMatricule;
+    private JTextField tfIdEnseignant;
+    private JComboBox comboBox1;
     private JDateChooser dateOfParution;
     private Connection con;
     private PreparedStatement pst;
@@ -89,9 +92,9 @@ public class AbsenceForm extends JFrame {
     }
 
     private void ViderChamps() {
-        tfTitre.setText("");
-        tfAuteur.setText("");
-        tfNbrPage.setText("");
+        tfDateAbsence.setText("");
+        tfeure.setText("");
+        tfSemestre.setText("");
         tfCode.setText("");
         dateOfParution.setDate(null);
 
@@ -118,10 +121,10 @@ public class AbsenceForm extends JFrame {
     }
 
     private void createLivre() {
-        String titre = tfTitre.getText();
-        String auteur = tfAuteur.getText();
+        String titre = tfDateAbsence.getText();
+        String auteur = tfeure.getText();
         Date dateParution = dateOfParution.getDate();
-        String nbrPage = tfNbrPage.getText();
+        String nbrPage = tfSemestre.getText();
         String code = tfCode.getText();
 
         if (titre.isEmpty() || auteur.isEmpty() || dateParution == null || nbrPage.isEmpty() || photoPath == null) {
@@ -194,10 +197,10 @@ public class AbsenceForm extends JFrame {
 
     private void modifyLivre() {
         String idLivre = tfRecherche.getText(); // Récupérer l'identifiant du livre
-        String titre = tfTitre.getText();
-        String auteur = tfAuteur.getText();
+        String titre = tfDateAbsence.getText();
+        String auteur = tfeure.getText();
         Date dateparution = dateOfParution.getDate();
-        String nbrpage = tfNbrPage.getText();
+        String nbrpage = tfSemestre.getText();
         String code = tfCode.getText();
 
         if (titre.isEmpty() || auteur.isEmpty() || dateparution == null || nbrpage.isEmpty() || code.isEmpty() || photoPath == null) {
@@ -276,10 +279,10 @@ public class AbsenceForm extends JFrame {
                 String code = rs.getString(5);
                 String photo = rs.getString(6);
 
-                tfTitre.setText(titre);
-                tfAuteur.setText(auteur);
+                tfDateAbsence.setText(titre);
+                tfeure.setText(auteur);
                 dateOfParution.setDate(dateParution);
-                tfNbrPage.setText(nbrPage);
+                tfSemestre.setText(nbrPage);
                 tfCode.setText(code);
 
                 if (photo != null && !photo.isEmpty()) {

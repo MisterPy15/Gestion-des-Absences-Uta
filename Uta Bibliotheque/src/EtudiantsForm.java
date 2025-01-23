@@ -18,6 +18,7 @@ public class EtudiantsForm extends JFrame {
     private JButton rechercherButton;
     private JTextField tfRecherche;
     private JPanel AdherentPanel;
+    private JComboBox cbSpecialitéNiveau;
 
     private Connection con;
     private PreparedStatement pst;

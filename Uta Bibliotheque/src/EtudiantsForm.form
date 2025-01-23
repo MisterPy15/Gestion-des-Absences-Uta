@@ -11,7 +11,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="152ab" layout-manager="GridLayoutManager" row-count="17" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="152ab" layout-manager="GridLayoutManager" row-count="19" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="3" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -80,7 +80,7 @@
           </component>
           <component id="41a43" class="javax.swing.JTextField" binding="tfRecherche">
             <constraints>
-              <grid row="16" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="18" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
@@ -91,7 +91,7 @@
           </component>
           <component id="b53fc" class="javax.swing.JLabel">
             <constraints>
-              <grid row="15" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="17" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -115,12 +115,12 @@
           </vspacer>
           <vspacer id="8ed57">
             <constraints>
-              <grid row="14" column="0" row-span="1" col-span="4" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="16" column="0" row-span="1" col-span="4" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
           <component id="8c8d" class="javax.swing.JButton" binding="rechercherButton" default-binding="true">
             <constraints>
-              <grid row="15" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="17" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font name="Monaco" size="18" style="1"/>
@@ -168,6 +168,47 @@
               <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
+          <component id="34000" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="14" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Monaco" size="18" style="1"/>
+              <text value="Spécilté Niveau"/>
+            </properties>
+          </component>
+          <component id="c77a7" class="javax.swing.JComboBox" binding="cbSpecialitéNiveau">
+            <constraints>
+              <grid row="15" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value=""/>
+                <item value="IGL L1"/>
+                <item value="IGL L2"/>
+                <item value="IGL L3"/>
+                <item value="RIT L1"/>
+                <item value="RIT L2"/>
+                <item value="RIT L3"/>
+                <item value="FBA L1"/>
+                <item value="FBA L2"/>
+                <item value="FBA L3"/>
+                <item value="SEG L1"/>
+                <item value="SEG L2"/>
+                <item value="SEG L3"/>
+                <item value="DROIT L1"/>
+                <item value="DROIT L2"/>
+                <item value="DROIT L3"/>
+                <item value=""/>
+                <item value="IDA B1"/>
+                <item value="IDA B2"/>
+                <item value="LOGISTIQUE B1"/>
+                <item value="LOGISTIQUE B2"/>
+                <item value="SEG B1"/>
+                <item value="SEG B2"/>
+              </model>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="9e236" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
