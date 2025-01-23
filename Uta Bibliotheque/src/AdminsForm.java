@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class AdminsForm extends JFrame {
@@ -68,7 +73,6 @@ public class AdminsForm extends JFrame {
         });
     }
 
-
     public void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -80,7 +84,6 @@ public class AdminsForm extends JFrame {
             ex.printStackTrace();
         }
     }
-
 
     private void table_load() {
         try {
@@ -103,6 +106,22 @@ public class AdminsForm extends JFrame {
         table_load();
     }
 
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void createAdmin() {
         String nom = tfNom.getText();
         String prenom = tfPrenom.getText();
@@ -116,12 +135,14 @@ public class AdminsForm extends JFrame {
             return;
         }
 
+        String hashedPassword = hashPassword(motDePasse);
+
         try {
             String queryUtilisateur = "INSERT INTO Utilisateur (Nom, Prenom, MotDePasse, NumTel, Adresse, Email, Role) VALUES (?, ?, ?, ?, ?, ?, 'Admin')";
             pst = con.prepareStatement(queryUtilisateur, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, nom);
             pst.setString(2, prenom);
-            pst.setString(3, motDePasse);
+            pst.setString(3, hashedPassword);
             pst.setString(4, numTel);
             pst.setString(5, adresse);
             pst.setString(6, email);
@@ -166,12 +187,14 @@ public class AdminsForm extends JFrame {
             return;
         }
 
+        String hashedPassword = hashPassword(motDePasse);
+
         try {
             String queryUtilisateur = "UPDATE Utilisateur SET Nom = ?, Prenom = ?, MotDePasse = ?, NumTel = ?, Adresse = ?, Email = ? WHERE Id = (SELECT IdUtilisateur FROM Administrateur WHERE Id = ?)";
             pst = con.prepareStatement(queryUtilisateur);
             pst.setString(1, nom);
             pst.setString(2, prenom);
-            pst.setString(3, motDePasse);
+            pst.setString(3, hashedPassword);
             pst.setString(4, numTel);
             pst.setString(5, adresse);
             pst.setString(6, email);
