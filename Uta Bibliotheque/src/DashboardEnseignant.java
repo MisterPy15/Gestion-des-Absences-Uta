@@ -23,6 +23,7 @@ public class DashboardEnseignant {
     private JLabel lblHeure;
     private JTable table1;
     private JPanel dashboardPanel;
+    private JTextField tfDate;
 
     private Connection con;
     private PreparedStatement pst;
@@ -154,6 +155,7 @@ public class DashboardEnseignant {
             }
         }, 0, 1000);
     }
+
 
 //    public static void main(String[] args) {
 ////        User user = new User(); // Replace with the logged-in user
