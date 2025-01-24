@@ -36,7 +36,11 @@ public class LoginForm extends JDialog {
                             "Succès",
                             JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    new DashoardForm(user); // Passer l'utilisateur authentifié au Dashboard
+                    if ("Enseignant".equals(user.role)) {
+                        new DashboardEnseignant(); // Afficher le DashboardEnseignant
+                    } else {
+                        new DashoardForm(user); // Afficher le Dashboard par défaut
+                    }
                 } else {
                     JOptionPane.showMessageDialog(LoginForm.this,
                             "Email, mot de passe ou rôle incorrect",
