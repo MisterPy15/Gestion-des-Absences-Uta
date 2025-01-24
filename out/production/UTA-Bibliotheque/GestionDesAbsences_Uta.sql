@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : jeu. 23 jan. 2025 à 23:28
+-- Généré le : ven. 24 jan. 2025 à 01:45
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -79,6 +79,13 @@ CREATE TABLE `Enseignant` (
   `IdUtilsateur` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `Enseignant`
+--
+
+INSERT INTO `Enseignant` (`Id`, `Num_Tel`, `IdUtilsateur`) VALUES
+(7, '08963479', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -100,8 +107,7 @@ CREATE TABLE `Etudiant` (
 --
 
 INSERT INTO `Etudiant` (`Id`, `NomEtudiant`, `PrenomEtudiant`, `Matricule`, `AdresseEtudiant`, `EmailEtudiant`, `SpecialiteNiveau`) VALUES
-(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', ''),
-(3, 'yapi', 'aboa', '14115678Z', 'abobo', 'yapi@gmail.com', '');
+(2, 'kouakou', 'yann', '1212123K', 'Bingerville', 'kyann@gmail.com', 'IGL L3');
 
 -- --------------------------------------------------------
 
@@ -125,15 +131,15 @@ CREATE TABLE `Module` (
   `Id` int(11) NOT NULL,
   `NomModule` varchar(60) DEFAULT NULL,
   `Coefficient_Module` int(11) DEFAULT NULL,
-  `Formation` varchar(255) NOT NULL
+  `SpecialiteNiveau` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Module`
 --
 
-INSERT INTO `Module` (`Id`, `NomModule`, `Coefficient_Module`, `Formation`) VALUES
-(1, 'Math Info', 6, '');
+INSERT INTO `Module` (`Id`, `NomModule`, `Coefficient_Module`, `SpecialiteNiveau`) VALUES
+(1, 'Math Info', 6, NULL);
 
 -- --------------------------------------------------------
 
@@ -162,7 +168,8 @@ INSERT INTO `Utilisateur` (`Id`, `Nom`, `Prenom`, `MotDePasse`, `NumTel`, `Adres
 (5, 'kouakou', 'Yann', 'de34ddf5af5bcbda0219a7280880a0b7c6ae7b12885160996fe3effaa67733a3', 89792682, 'Poy', 'kyann@gmail.com', 'Enseignant'),
 (6, 'Wongniga', 'seydou soro', '756bc47cb5215dc3329ca7e1f7be33a2dad68990bb94b76d90aa07f4e44a233a', 78987879, 'bingerville', 'w@gmail.com', 'Enseignant'),
 (7, 'agoh', 'chris', '9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0', 778748602, 'Adjamé', 'py@gmail.com', 'Enseignant'),
-(8, 'Mr', 'Py', 'py1234', 778748602, 'Yopougon', 'py@gmail.com', 'Admin');
+(8, 'Mr', 'Py', 'py1234', 778748602, 'Yopougon', 'py@gmail.com', 'Admin'),
+(9, 'agoh', 'chris', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 778748602, 'Adjammé', 'py@gmail.com', 'Enseignant');
 
 --
 -- Index pour les tables déchargées
@@ -201,8 +208,7 @@ ALTER TABLE `Enseignant`
 -- Index pour la table `Etudiant`
 --
 ALTER TABLE `Etudiant`
-  ADD PRIMARY KEY (`Id`),
-  ADD KEY `idx_specialiteniveau` (`SpecialiteNiveau`);
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Index pour la table `Formation`
@@ -214,8 +220,7 @@ ALTER TABLE `Formation`
 -- Index pour la table `Module`
 --
 ALTER TABLE `Module`
-  ADD PRIMARY KEY (`Id`),
-  ADD KEY `fk_formation` (`Formation`);
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Index pour la table `Utilisateur`
@@ -249,7 +254,7 @@ ALTER TABLE `Cours`
 -- AUTO_INCREMENT pour la table `Enseignant`
 --
 ALTER TABLE `Enseignant`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `Etudiant`
@@ -273,7 +278,7 @@ ALTER TABLE `Module`
 -- AUTO_INCREMENT pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Contraintes pour les tables déchargées
@@ -303,12 +308,6 @@ ALTER TABLE `Cours`
 --
 ALTER TABLE `Enseignant`
   ADD CONSTRAINT `enseignant_ibfk_1` FOREIGN KEY (`IdUtilsateur`) REFERENCES `Utilisateur` (`Id`);
-
---
--- Contraintes pour la table `Module`
---
-ALTER TABLE `Module`
-  ADD CONSTRAINT `fk_formation` FOREIGN KEY (`Formation`) REFERENCES `Etudiant` (`SpecialiteNiveau`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

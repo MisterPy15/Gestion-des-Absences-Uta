@@ -37,7 +37,7 @@ public class LoginForm extends JDialog {
                             JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                     if ("Enseignant".equals(user.role)) {
-                        new DashboardEnseignant(); // Afficher le DashboardEnseignant
+                        new DashboardEnseignant(user); // Afficher le DashboardEnseignant
                     } else {
                         new DashoardForm(user); // Afficher le Dashboard par défaut
                     }

@@ -7,4 +7,5 @@ public class User {
     public String motDePasse;
     public String photoPath;
     public String role;
+    public int id;
 }
